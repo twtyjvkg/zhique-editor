@@ -23,7 +23,6 @@
   "private": false,
   "scripts": {
     "build": "webpack --env.NODE_ENV=production",
-    "build:demo": "webpack --env.NODE_ENV=demo",
     "dev": "webpack-dev-server",
     "deploy": "gh-pages-deploy"
   },
