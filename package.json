@@ -2,7 +2,7 @@
   "name": "zhique-design-editor",
   "version": "1.0.0",
   "description": "markdown editor as React components",
-  "main": "dist/bundle.js",
+  "main": "dist/index.js",
   "keywords": [
     "markdown",
     "markdown-editor",
