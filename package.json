@@ -11,13 +11,6 @@
     "zhique-design",
     "zhique-design-editor"
   ],
-  "gh-pages-deploy": {
-    "noprompt": true,
-    "prep": [
-      "build"
-    ],
-    "staticpath": "dist"
-  },
   "files": [
     "dist"
   ],
@@ -30,8 +23,16 @@
   "private": false,
   "scripts": {
     "build": "webpack --env.NODE_ENV=production",
+    "build:demo": "webpack --env.NODE_ENV=demo",
     "dev": "webpack-dev-server",
     "deploy": "gh-pages-deploy"
+  },
+  "gh-pages-deploy": {
+    "noprompt": true,
+    "prep": [
+      "build:demo"
+    ],
+    "staticpath": "demo/dist"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
