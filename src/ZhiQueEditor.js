@@ -8,8 +8,31 @@ import {
     faBold,
     faStrikethrough,
     faItalic,
-    faQuoteLeft
+    faQuoteLeft,
+    faListUl,
+    faListOl,
+    faMinus,
+    faLink,
+    faAnchor,
+    faCode,
+    faTable,
+    faTerminal,
+    faDesktop,
+    faArrowsAlt,
+    faEraser,
+    faSearch,
+    faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+    faImage,
+    faFileCode,
+    faClock,
+    faSmile,
+    faCopyright,
+    faNewspaper,
+    faEyeSlash,
+    faQuestionCircle,
+} from "@fortawesome/free-regular-svg-icons";
 import { Controlled as CodeMirror } from 'react-codemirror2';
 
 import CodeBlock from './CodeBlock';
@@ -43,11 +66,11 @@ import 'codemirror/mode/groovy/groovy';
 
 import './ZhiQueEditor.less';
 
-const ToolItem = ({ icon, text, onClick }) => (
+const ToolItem = ({ icon, title, text, onClick }) => (
     <li
         onClick={onClick}
     >
-        <i title={text}><FontAwesomeIcon icon={icon} /></i>
+        <i title={title}>{icon && <FontAwesomeIcon icon={icon} />}{text}</i>
     </li>
 );
 
@@ -105,7 +128,7 @@ class ZhiQueEditor extends Component {
                     <div className="editor-toolbar-container">
                         <ul className="editor-tool-menu">
                             <ToolItem
-                                text="撤销（Ctrl+Z）"
+                                title="撤销（Ctrl+Z）"
                                 icon={faUndo}
                                 onClick={e => {
                                     e.preventDefault();
@@ -114,7 +137,7 @@ class ZhiQueEditor extends Component {
                                 }}
                             />
                             <ToolItem
-                                text="重做（Ctrl+Y）"
+                                title="重做（Ctrl+Y）"
                                 icon={faRedo}
                                 onClick={e => {
                                     e.preventDefault();
@@ -124,7 +147,7 @@ class ZhiQueEditor extends Component {
                             />
                             <li className="divider">|</li>
                             <ToolItem
-                                text="粗体"
+                                title="粗体"
                                 icon={faBold}
                                 onClick={e => {
                                     e.preventDefault();
@@ -138,7 +161,7 @@ class ZhiQueEditor extends Component {
                                 }}
                             />
                             <ToolItem
-                                text="删除线"
+                                title="删除线"
                                 icon={faStrikethrough}
                                 onClick={e => {
                                     e.preventDefault();
@@ -152,7 +175,7 @@ class ZhiQueEditor extends Component {
                                 }}
                             />
                             <ToolItem
-                                text="斜体"
+                                title="斜体"
                                 icon={faItalic}
                                 onClick={e => {
                                     e.preventDefault();
@@ -166,7 +189,7 @@ class ZhiQueEditor extends Component {
                                 }}
                             />
                             <ToolItem
-                                text="引用"
+                                title="引用"
                                 icon={faQuoteLeft}
                                 onClick={e => {
                                     e.preventDefault();
@@ -181,6 +204,279 @@ class ZhiQueEditor extends Component {
                                         cm.replaceSelection("> " + selection);
                                     }
                                 }}
+                            />
+                            <ToolItem
+                                title="将每个单词首字母转成大写"
+                                text="Aa"
+                            />
+                            <ToolItem
+                                title="将所选转换成大写"
+                                text="A"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const selection = cm.getSelection();
+                                    const selections = cm.listSelections();
+                                    cm.replaceSelection(selection.toUpperCase());
+                                    cm.setSelections(selections)
+                                }}
+                            />
+                            <ToolItem
+                                title="将所选转换成小写"
+                                text="a"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const selection = cm.getSelection();
+                                    const selections = cm.listSelections();
+                                    cm.replaceSelection(selection.toLowerCase());
+                                    cm.setSelections(selections)
+                                }}
+                            />
+                            <li className="divider">|</li>
+                            <ToolItem
+                                title="标题1"
+                                text="H1"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    if (cursor.ch !== 0)
+                                    {
+                                        cm.setCursor(cursor.line, 0);
+                                        cm.replaceSelection(`# ${selection}`);
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                    else
+                                    {
+                                        cm.replaceSelection(`# ${selection}`);
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                title="标题2"
+                                text="H2"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    if (cursor.ch !== 0)
+                                    {
+                                        cm.setCursor(cursor.line, 0);
+                                        cm.replaceSelection(`## ${selection}`);
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                    else
+                                    {
+                                        cm.replaceSelection(`## ${selection}`);
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                title="标题3"
+                                text="H3"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    if (cursor.ch !== 0)
+                                    {
+                                        cm.setCursor(cursor.line, 0);
+                                        cm.replaceSelection(`### ${selection}`);
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                    else
+                                    {
+                                        cm.replaceSelection(`### ${selection}`);
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                title="标题4"
+                                text="H4"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    if (cursor.ch !== 0)
+                                    {
+                                        cm.setCursor(cursor.line, 0);
+                                        cm.replaceSelection(`#### ${selection}`);
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                    else
+                                    {
+                                        cm.replaceSelection(`#### ${selection}`);
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                title="标题5"
+                                text="H5"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    if (cursor.ch !== 0)
+                                    {
+                                        cm.setCursor(cursor.line, 0);
+                                        cm.replaceSelection(`##### ${selection}`);
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                    else
+                                    {
+                                        cm.replaceSelection(`##### ${selection}`);
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                title="标题6"
+                                text="H6"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    if (cursor.ch !== 0)
+                                    {
+                                        cm.setCursor(cursor.line, 0);
+                                        cm.replaceSelection(`###### ${selection}`);
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                    else
+                                    {
+                                        cm.replaceSelection(`###### ${selection}`);
+                                    }
+                                }}
+                            />
+                            <li className="divider">|</li>
+                            <ToolItem
+                                title="无序列表"
+                                icon={faListUl}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const selection = cm.getSelection();
+                                    if ('' === selection) {
+                                        cm.replaceSelection(`- ${selection}`);
+                                    } else {
+                                        const selectionText = selection.split('\n').map(item => (
+                                            '' === item ? '' : `- ${item}`
+                                        ));
+                                        cm.replaceSelection(selectionText.join('\n'));
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                title="有序列表"
+                                icon={faListOl}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const selection = cm.getSelection();
+                                    if ('' === selection) {
+                                        cm.replaceSelection(`1. ${selection}`);
+                                    } else {
+                                        const selectionText = selection.split('\n').map((item, index) => (
+                                            '' === item ? '' : `${index + 1}. ${item}`
+                                        ));
+                                        cm.replaceSelection(selectionText.join('\n'));
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                title="横线"
+                                icon={faMinus}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    cm.replaceSelection(`${(0 !== cursor.ch) ? '\n\n' : '\n'}------------\n\n`)
+                                }}
+                            />
+                            <li className="divider">|</li>
+                            <ToolItem
+                                title="链接"
+                                icon={faLink}
+                            />
+                            <ToolItem
+                                title="引用链接"
+                                icon={faAnchor}
+                            />
+                            <ToolItem
+                                title="添加图片"
+                                icon={faImage}
+                            />
+                            <ToolItem
+                                title="行内代码"
+                                icon={faCode}
+                            />
+                            <ToolItem
+                                title="预格式文本 / 代码块（缩进风格）"
+                                icon={faFileCode}
+                            />
+                            <ToolItem
+                                title="代码块（多语言风格）"
+                                icon={faFileCode}
+                            />
+                            <ToolItem
+                                title="添加表格"
+                                icon={faTable}
+                            />
+                            <ToolItem
+                                title="日期时间"
+                                icon={faClock}
+                            />
+                            <ToolItem
+                                title="Emoji表情"
+                                icon={faSmile}
+                            />
+                            <ToolItem
+                                title="HTML实体字符"
+                                icon={faCopyright}
+                            />
+                            <ToolItem
+                                title="插入分页符"
+                                icon={faNewspaper}
+                            />
+                            <li className="divider">|</li>
+                            <ToolItem
+                                title="跳转到行"
+                                icon={faTerminal}
+                            />
+                            <ToolItem
+                                title="关闭实时预览"
+                                icon={faEyeSlash}
+                            />
+                            <ToolItem
+                                title="全窗口预览HTML（按 Shift + ESC还原）"
+                                icon={faDesktop}
+                            />
+                            <ToolItem
+                                title="全屏（按ESC还原）"
+                                icon={faArrowsAlt}
+                            />
+                            <ToolItem
+                                title="清空"
+                                icon={faEraser}
+                            />
+                            <ToolItem
+                                title="搜索"
+                                icon={faSearch}
+                            />
+                            <li className="divider">|</li>
+                            <ToolItem
+                                title="使用帮助"
+                                icon={faQuestionCircle}
+                            />
+                            <ToolItem
+                                title="关于zhique-design-editor"
+                                icon={faInfoCircle}
                             />
                         </ul>
                     </div>
