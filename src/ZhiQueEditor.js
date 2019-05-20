@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MarkDown from 'react-markdown';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faFileImage } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUndo, faRedo } from '@fortawesome/free-solid-svg-icons';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 
 import CodeBlock from './CodeBlock';
@@ -87,7 +87,26 @@ class ZhiQueEditor extends Component {
         return (
             <div className="zhique-markdown-editor-wrapper">
                 <div className="zhique-markdown-editor-toolbar">
-                    {/*<span><FontAwesomeIcon icon={faFileImage} /></span>*/}
+                    <div className="editor-toolbar-container">
+                        <ul className="editor-tool-menu">
+                            <li
+                                onClick={e => {
+                                    e.preventDefault();
+                                    this.editor.undo();
+                                }}
+                            >
+                                <a title="撤销（Ctrl+Z）"><FontAwesomeIcon icon={faUndo} /></a>
+                            </li>
+                            <li
+                                onClick={e => {
+                                    e.preventDefault();
+                                    this.editor.redo();
+                                }}
+                            >
+                                <a title="重做（Ctrl+Y）"><FontAwesomeIcon icon={faRedo} /></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div className="zhique-markdown-editor-area" style={{ height: typeof height === 'number' ? `${height}px` : height}} onWheel={this.handleWheel}>
                     <div className="zhique-markdown-editor">
