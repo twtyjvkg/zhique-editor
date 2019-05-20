@@ -16,27 +16,27 @@
           line-height: 100%;
           padding: 5px 1px;
           display: inline-block;
+          font-size: 14px;
+          color: #666;
 
-          & > a {
+          &.divider {
+            height: 65%;
+            text-indent: -9999px;
+            border-right: 1px solid #ddd;
+          }
+
+          & > i {
             cursor: pointer;
             display: inline-block;
             line-height: 100%;
             min-width: 24px;
             text-align: center;
             text-decoration: none;
-
-            & > svg {
-              font-size: 14px;
-              color: #666;
-
-              &:hover {
-                color: #5f88ff;
-              }
-            }
           }
 
           &:hover {
-            background: #cecece;
+            color: #5f88ff;
+            background: #e8e8e8;
           }
         }
       }
@@ -66,26 +66,6 @@
       float: right;
       overflow: hidden;
 
-      .FreeScrollbar-vertical-track {
-        background-color: transparent !important;
-        border-left: none !important;
-
-        .FreeScrollbar-vertical-handler {
-          width: 80% !important;
-          opacity: 0.5 !important;
-        }
-      }
-
-      .FreeScrollbar-horizontal-track {
-        background-color: transparent !important;
-        border-top: none !important;
-
-        .FreeScrollbar-horizontal-handler {
-          height: 80% !important;
-          opacity: 0.5 !important;
-        }
-      }
-
       tr {
         border-top: 1px solid #c6cbd1;
         background: #fff;
@@ -98,6 +78,12 @@
 
       table tr:nth-child(2n) {
         background: #f6f8fa;
+      }
+
+      blockquote {
+        border-left: 0.5em #eee solid;
+        margin-inline-start: 0;
+        padding-inline-start: 40px;
       }
     }
   }

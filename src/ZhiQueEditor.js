@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MarkDown from 'react-markdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUndo, faRedo } from '@fortawesome/free-solid-svg-icons';
+import {
+    faUndo,
+    faRedo,
+    faBold,
+    faStrikethrough,
+    faItalic,
+    faQuoteLeft
+} from '@fortawesome/free-solid-svg-icons';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 
 import CodeBlock from './CodeBlock';
@@ -35,6 +42,14 @@ import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/groovy/groovy';
 
 import './ZhiQueEditor.less';
+
+const ToolItem = ({ icon, text, onClick }) => (
+    <li
+        onClick={onClick}
+    >
+        <i title={text}><FontAwesomeIcon icon={icon} /></i>
+    </li>
+);
 
 
 class ZhiQueEditor extends Component {
@@ -89,22 +104,84 @@ class ZhiQueEditor extends Component {
                 <div className="zhique-markdown-editor-toolbar">
                     <div className="editor-toolbar-container">
                         <ul className="editor-tool-menu">
-                            <li
+                            <ToolItem
+                                text="撤销（Ctrl+Z）"
+                                icon={faUndo}
                                 onClick={e => {
                                     e.preventDefault();
-                                    this.editor.undo();
+                                    const cm = this.editor;
+                                    cm.undo();
                                 }}
-                            >
-                                <a title="撤销（Ctrl+Z）"><FontAwesomeIcon icon={faUndo} /></a>
-                            </li>
-                            <li
+                            />
+                            <ToolItem
+                                text="重做（Ctrl+Y）"
+                                icon={faRedo}
                                 onClick={e => {
                                     e.preventDefault();
-                                    this.editor.redo();
+                                    const cm = this.editor;
+                                    cm.redo();
                                 }}
-                            >
-                                <a title="重做（Ctrl+Y）"><FontAwesomeIcon icon={faRedo} /></a>
-                            </li>
+                            />
+                            <li className="divider">|</li>
+                            <ToolItem
+                                text="粗体"
+                                icon={faBold}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    cm.replaceSelection(`**${selection}**`);
+                                    if ('' === selection) {
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                text="删除线"
+                                icon={faStrikethrough}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    cm.replaceSelection(`~~${selection}~~`);
+                                    if ('' === selection) {
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                text="斜体"
+                                icon={faItalic}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    cm.replaceSelection(`*${selection}*`);
+                                    if ('' === selection) {
+                                        cm.setCursor(cursor.line, cursor.ch + 1);
+                                    }
+                                }}
+                            />
+                            <ToolItem
+                                text="引用"
+                                icon={faQuoteLeft}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    if (cursor.ch !== 0) {
+                                        cm.setCursor(cursor.line, 0);
+                                        cm.replaceSelection("> " + selection);
+                                        cm.setCursor(cursor.line, cursor.ch + 2);
+                                    } else {
+                                        cm.replaceSelection("> " + selection);
+                                    }
+                                }}
+                            />
                         </ul>
                     </div>
                 </div>
