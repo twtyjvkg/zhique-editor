@@ -34,6 +34,7 @@ import {
     faQuestionCircle,
 } from "@fortawesome/free-regular-svg-icons";
 import { Controlled as CodeMirror } from 'react-codemirror2';
+import moment from 'moment';
 
 import CodeBlock from './CodeBlock';
 
@@ -415,6 +416,16 @@ class ZhiQueEditor extends Component {
                             <ToolItem
                                 title="行内代码"
                                 icon={faCode}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    const cursor = cm.getCursor();
+                                    const selection = cm.getSelection();
+                                    cm.replaceSelection(`\`${selection}\``);
+                                    if ('' === selection) {
+                                        cm.setCursor(cursor.line, cursor.ch + 1);
+                                    }
+                                }}
                             />
                             <ToolItem
                                 title="预格式文本 / 代码块（缩进风格）"
@@ -431,6 +442,12 @@ class ZhiQueEditor extends Component {
                             <ToolItem
                                 title="日期时间"
                                 icon={faClock}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    moment.locale(navigator.language||navigator.userLanguage);
+                                    cm.replaceSelection(moment(new Date()).format(dateFormat))
+                                }}
                             />
                             <ToolItem
                                 title="Emoji表情"
@@ -443,6 +460,11 @@ class ZhiQueEditor extends Component {
                             <ToolItem
                                 title="插入分页符"
                                 icon={faNewspaper}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    cm.replaceSelection('\r\n[========]\r\n');
+                                }}
                             />
                             <li className="divider">|</li>
                             <ToolItem
@@ -488,7 +510,6 @@ class ZhiQueEditor extends Component {
                                 mode: 'gfm',
                                 theme: 'material',
                                 lineNumbers: true,
-                                autofocus: true,
                                 scrollbarStyle: "overlay",
                                 foldGutter: true,
                                 gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
@@ -526,12 +547,14 @@ class ZhiQueEditor extends Component {
 ZhiQueEditor.defaultProps = {
     height: 500,
     onChange: undefined,
+    dateFormat: 'YYYY-MM-DD HH:mm:ss dddd'
 };
 
 ZhiQueEditor.propTypes = {
     onChange: PropTypes.func,
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    value: PropTypes.string
+    value: PropTypes.string,
+    dataFormat: PropTypes.string
 };
 
 export default ZhiQueEditor;
