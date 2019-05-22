@@ -76,6 +76,27 @@ const ToolItem = ({ icon, title, text, onClick }) => (
 );
 
 
+const LinkDialog = (
+  <div className="editor-dialog">
+      <div className="link-dialog-header">
+          <strong className="link-dialog-title">添加链接</strong>
+      </div>
+      <div className="editor-dialog-container">
+          <div className="editor-dialog-form">
+              <label>链接地址</label>
+              <input type="text" /><br />
+              <label>链接标题</label>
+              <input type="text" /><br />
+          </div>
+          <div className="editor-dialog-footer">
+              <button>确定</button>
+              <button>取消</button>
+          </div>
+      </div>
+  </div>
+);
+
+
 class ZhiQueEditor extends Component {
 
     constructor(props) {
@@ -124,8 +145,8 @@ class ZhiQueEditor extends Component {
         const { height } = this.props;
         const { text } = this.state;
         return (
-            <div className="zhique-markdown-editor-wrapper">
-                <div className="zhique-markdown-editor-toolbar">
+            <div className="zhique-design-editor-wrapper">
+                <div className="zhique-design-editor-toolbar">
                     <div className="editor-toolbar-container">
                         <ul className="editor-tool-menu">
                             <ToolItem
@@ -404,6 +425,11 @@ class ZhiQueEditor extends Component {
                             <ToolItem
                                 title="链接"
                                 icon={faLink}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    const cm = this.editor;
+                                    debugger
+                                }}
                             />
                             <ToolItem
                                 title="引用链接"
@@ -503,8 +529,8 @@ class ZhiQueEditor extends Component {
                         </ul>
                     </div>
                 </div>
-                <div className="zhique-markdown-editor-area" style={{ height: typeof height === 'number' ? `${height}px` : height}} onWheel={this.handleWheel}>
-                    <div className="zhique-markdown-editor">
+                <div className="zhique-design-editor-area" style={{ height: typeof height === 'number' ? `${height}px` : height}} onWheel={this.handleWheel}>
+                    <div className="zhique-design-editor">
                         <CodeMirror
                             options={{
                                 mode: 'gfm',
@@ -539,6 +565,7 @@ class ZhiQueEditor extends Component {
                         />
                     </div>
                 </div>
+                {LinkDialog}
             </div>
         )
     }
