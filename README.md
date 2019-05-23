@@ -1,6 +1,8 @@
 zhique-design-editor
 ======================
 
+[![Build Status](https://www.travis-ci.org/zhique-design/zhique-design-editor.svg?branch=master)](https://www.travis-ci.org/zhique-design/zhique-design-editor)
+
 **zhique-design-editor** : The open source online markdown editor (component), based on react & react-markdown & react-codemirror2.
 
 ## Features
