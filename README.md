@@ -1,9 +1,9 @@
-zhique-design-editor
+zhique-editor
 ======================
 
-[![Build Status](https://www.travis-ci.org/zhique-design/zhique-design-editor.svg?branch=master)](https://www.travis-ci.org/zhique-design/zhique-design-editor)
+[![Build Status](https://www.travis-ci.org/zhique-design/zhique-editor.svg?branch=master)](https://www.travis-ci.org/zhique-design/zhique-editor)
 
-**zhique-design-editor** : The open source online markdown editor (component), based on react & react-markdown & react-codemirror2.
+**zhique-editor** : The open source online markdown editor (component), based on react & react-markdown & react-codemirror2.
 
 ## Features
 
@@ -12,7 +12,7 @@ zhique-design-editor
 
 --------
 
-**zhique-design-editor** : 是一款开源的Markdown 在线编辑器（组件），基于 react、react-markdown 和 react-codemirror2 构建。
+**zhique-editor** : 是一款开源的Markdown 在线编辑器（组件），基于 react、react-markdown 和 react-codemirror2 构建。
 
 ## 主要特性
 
@@ -24,19 +24,19 @@ zhique-design-editor
 - npm
 
 ```
-npm install @zhique-design/zhique-design-editor
+npm install @zhique-design/zhique-editor
 ```
 
 - yarn
 
 ```
-yarn add @zhique-design/zhique-design-editor
+yarn add @zhique-design/zhique-editor
 ```
 
 ## Basic usage
 
 ```typescript jsx
-import ZhiQueEditor from 'zhique-design-editor';
+import ZhiQueEditor from '@zhique-design/zhique-editor';
 
 <ZhiQueEditor />
 ```

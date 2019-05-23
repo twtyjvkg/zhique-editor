@@ -1,22 +1,23 @@
 {
-  "name": "@zhique-design/zhique-design-editor",
-  "version": "0.1.1",
+  "name": "@zhique-design/zhique-editor",
+  "version": "0.0.1",
   "description": "markdown editor as React components",
   "main": "dist/index.js",
   "keywords": [
     "markdown",
     "markdown-editor",
     "react",
+    "react-markdown",
     "react-component",
     "zhique-design",
-    "zhique-design-editor"
+    "zhique-editor"
   ],
   "files": [
     "dist"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/zhique-design/zhique-design-editor"
+    "url": "https://github.com/zhique-design/zhique-editor"
   },
   "author": "徐昭 <xuzhao.zhique.design>",
   "license": "Apache",
