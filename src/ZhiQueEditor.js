@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MarkDown from 'react-markdown';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 
 

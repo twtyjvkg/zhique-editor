@@ -24,13 +24,13 @@ zhique-design-editor
 - npm
 
 ```
-npm install zhique-design-editor
+npm install @zhique-design/zhique-design-editor
 ```
 
 - yarn
 
 ```
-yarn add zhique-design-editor
+yarn add @zhique-design/zhique-design-editor
 ```
 
 ## Basic usage
