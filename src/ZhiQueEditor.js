@@ -86,9 +86,9 @@ class ZhiQueEditor extends Component {
         const { height } = this.props;
         const { text } = this.state;
         return (
-            <div className="zhique-design-editor-wrapper">
-                <div className="zhique-design-editor-area" style={{ height: typeof height === 'number' ? `${height}px` : height}} onWheel={this.handleWheel}>
-                    <div className="zhique-design-editor">
+            <div className="zhique-editor-wrapper">
+                <div className="zhique-editor-area" style={{ height: typeof height === 'number' ? `${height}px` : height}} onWheel={this.handleWheel}>
+                    <div className="zhique-editor">
                         <CodeMirror
                             options={{
                                 mode: 'gfm',

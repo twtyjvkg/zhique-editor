@@ -17,10 +17,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/zhique-design/zhique-editor"
+    "url": "git+https://github.com/zhique-design/zhique-editor.git"
   },
+  "bugs": {
+    "url": "https://github.com/zhique-design/zhique-editor/issues"
+  },
+  "homepage": "https://github.com/zhique-design/zhique-editor#readme",
   "author": "徐昭 <xuzhao.zhique.design>",
-  "license": "Apache",
+  "license": "Apache-2.0",
   "private": false,
   "scripts": {
     "build": "webpack --env.NODE_ENV=production",
