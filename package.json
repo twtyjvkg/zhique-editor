@@ -1,6 +1,6 @@
 {
   "name": "zhique-design-editor",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "markdown editor as React components",
   "main": "dist/index.js",
   "keywords": [
@@ -34,10 +34,6 @@
     "staticpath": "demo/dist"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.18",
-    "@fortawesome/free-regular-svg-icons": "^5.8.2",
-    "@fortawesome/free-solid-svg-icons": "^5.8.2",
-    "@fortawesome/react-fontawesome": "^0.1.4",
     "codemirror": "^5.46.0",
     "highlight.js": "^9.15.6",
     "moment": "^2.24.0",

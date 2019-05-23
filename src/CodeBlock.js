@@ -27,7 +27,7 @@ class CodeBlock extends Component {
         return (
             <pre>
                 <code ref={this.setRef} className={`language-${language}`}>
-                  {value}
+                    {value}
                 </code>
              </pre>
         );
