@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import highlight from 'highlight.js';
 import PropTypes from 'prop-types';
 
-import 'highlight.js/styles/darcula.css';
-
 class CodeBlock extends Component {
 
     componentDidMount() {

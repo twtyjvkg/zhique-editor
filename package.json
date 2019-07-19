@@ -39,7 +39,7 @@
     "staticpath": "demo/dist"
   },
   "dependencies": {
-    "codemirror": "^5.46.0",
+    "codemirror": "^5.48.0",
     "highlight.js": "^9.15.6",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",

@@ -36,6 +36,8 @@ import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/groovy/groovy';
 
+import 'highlight.js/styles/darcula.css';
+
 import './ZhiQueEditor.less';
 
 class ZhiQueEditor extends Component {
@@ -83,37 +85,39 @@ class ZhiQueEditor extends Component {
 
     render() {
 
-        const { height } = this.props;
+        const { height, previewOnly } = this.props;
         const { text } = this.state;
         return (
             <div className="zhique-editor-wrapper">
-                <div className="zhique-editor-area" style={{ height: typeof height === 'number' ? `${height}px` : height}} onWheel={this.handleWheel}>
-                    <div className="zhique-editor">
-                        <CodeMirror
-                            options={{
-                                mode: 'gfm',
-                                theme: 'material',
-                                lineNumbers: true,
-                                scrollbarStyle: "overlay",
-                                foldGutter: true,
-                                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-                                matchBrackets: true,
-                                autoCloseBrackets: true,
-                                matchTags: true,
-                                autoCloseTags: true,
-                            }}
-                            value={text}
-                            onBeforeChange={this.handleBeforeChange}
-                            onChange={this.handleChange}
-                            onScroll={this.handleScroll}
-                            editorDidMount={(editor) => {
-                                editor.setSize('100%', '100%');
-                                editor.setOption('lineWrapping', 'auto');
-                                this.editor = editor;
-                            }}
-                        />
-                    </div>
-                    <div ref={this.previewArea} className="zhique-markdown-preview" style={{ height: typeof height === 'number' ? `${height}px` : height}}>
+                <div className="zhique-editor-area" style={{ height: typeof height === 'number' ? `${height}px` : height}} onWheel={previewOnly ? undefined : this.handleWheel}>
+                    {!previewOnly && (
+                        <div className="zhique-editor">
+                            <CodeMirror
+                                options={{
+                                    mode: 'gfm',
+                                    theme: 'material',
+                                    lineNumbers: true,
+                                    scrollbarStyle: "overlay",
+                                    foldGutter: true,
+                                    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                                    matchBrackets: true,
+                                    autoCloseBrackets: true,
+                                    matchTags: true,
+                                    autoCloseTags: true,
+                                }}
+                                value={text}
+                                onBeforeChange={this.handleBeforeChange}
+                                onChange={this.handleChange}
+                                onScroll={this.handleScroll}
+                                editorDidMount={(editor) => {
+                                    editor.setSize('100%', '100%');
+                                    editor.setOption('lineWrapping', 'auto');
+                                    this.editor = editor;
+                                }}
+                            />
+                        </div>
+                    )}
+                    <div ref={this.previewArea} className={`zhique-markdown-preview ${previewOnly ? 'preview-only' : ''}`} style={{ height: typeof height === 'number' ? `${height}px` : height}}>
                         <MarkDown
                             source={text}
                             renderers={{
@@ -131,12 +135,14 @@ class ZhiQueEditor extends Component {
 ZhiQueEditor.defaultProps = {
     height: 500,
     onChange: undefined,
+    previewOnly: false
 };
 
 ZhiQueEditor.propTypes = {
     onChange: PropTypes.func,
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     value: PropTypes.string,
+    previewOnly: PropTypes.bool
 };
 
 export default ZhiQueEditor;
