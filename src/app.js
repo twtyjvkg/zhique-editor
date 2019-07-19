@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import ZhiQueEditor from './ZhiQueEditor';
+import MarkdownEditor from './index';
 
-ReactDom.render(<ZhiQueEditor />, document.getElementById('app'));
+ReactDom.render(<MarkdownEditor id="test-editor" />, document.getElementById('app'));

@@ -1,3 +1,3 @@
-import ZhiQueEditor from './ZhiQueEditor';
+import MarkdownEditor from './MarkdownEditor';
 
-export default ZhiQueEditor;
+export default MarkdownEditor;

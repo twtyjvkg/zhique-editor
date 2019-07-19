@@ -39,6 +39,7 @@
     "staticpath": "demo/dist"
   },
   "dependencies": {
+    "classnames": "^2.2.6",
     "codemirror": "^5.48.0",
     "highlight.js": "^9.15.6",
     "moment": "^2.24.0",
