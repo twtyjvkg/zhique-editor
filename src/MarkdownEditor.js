@@ -79,7 +79,7 @@ class MarkdownEditor extends PureComponent {
 
     cmScroll = e => {
         const {
-            offsetHeight: height,
+            clientHeight: height,
             scrollTop,
             scrollHeight
         } = e.currentTarget;
@@ -124,7 +124,9 @@ class MarkdownEditor extends PureComponent {
                     style={{ width: _width, height: _height }}
                     ref={this.preview}
                     onMouseOver={this.previewBindScroll}
+                    onTouchStart={this.previewBindScroll}
                     onMouseOut={this.previewUnbindScroll}
+                    onTouchEnd={this.previewUnbindScroll}
                 >
                     <div
                         className={classNames('markdown-body', `${classPrefix}preview-container`)}

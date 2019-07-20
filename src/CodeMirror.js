@@ -43,7 +43,9 @@ class CodeMirror extends PureComponent{
     componentDidMount() {
         const codeMirror = this.codeMirror.current.ref;
         codeMirror.addEventListener('mouseover', this.cmBindScroll);
+        codeMirror.addEventListener('touchstart', this.cmBindScroll);
         codeMirror.addEventListener('mouseout', this.cmUnbindScroll);
+        codeMirror.addEventListener('touchend', this.cmUnbindScroll);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -78,7 +80,7 @@ class CodeMirror extends PureComponent{
 
     cmScroll = e => {
         const {
-            offsetHeight: height,
+            clientHeight: height,
             scrollTop,
             scrollHeight
         } = e.currentTarget;
@@ -101,6 +103,7 @@ class CodeMirror extends PureComponent{
                 ref={this.codeMirror}
                 editorDidMount={(editor) => {
                     editor.setSize('100%', '100%');
+                    editor.setOption('lineWrapping', 'auto');
                     editor.focus();
                     this.editor = editor;
                 }}
