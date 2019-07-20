@@ -35,8 +35,8 @@ class CodeMirror extends PureComponent{
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props !== prevProps) {
             const { width, height, fontSize } = this.props;
-            this.codeMirror.current.ref.style.width = `${width}px`;
-            this.codeMirror.current.ref.style.height = `${height}px`;
+            this.codeMirror.current.ref.style.width = typeof width === 'string' ? width : `${width}px`;
+            this.codeMirror.current.ref.style.height = typeof height === 'string' ? height : `${height}px`;
             this.codeMirror.current.ref.style.fontSize = fontSize;
         }
     }

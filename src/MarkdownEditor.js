@@ -38,10 +38,10 @@ class MarkdownEditor extends PureComponent {
     }
 
     handleResize = () => {
-        const { offsetWidth, offsetHeight } = this.editor.current;
+        const { clientWidth, clientHeight } = this.editor.current;
         this.setState({
-            _width: offsetWidth/2,
-            _height: offsetHeight
+            _width: clientWidth/2,
+            _height: clientHeight
         });
         const previewContainer = this.previewContainer.current;
         previewContainer.style.padding = '20px';
@@ -50,7 +50,12 @@ class MarkdownEditor extends PureComponent {
     handleChange = value => {
         this.setState({
             text: value
-        })
+        });
+
+        const { onChange } = this.props;
+        if (onChange) {
+            onChange(value);
+        }
     };
 
     previewScroll = (top, scrollHeight, height, percent) => {
@@ -109,8 +114,8 @@ class MarkdownEditor extends PureComponent {
             >
                 <CodeMirror
                     value={text}
-                    width={_width-2}
-                    height={_height-2}
+                    width={_width}
+                    height={_height}
                     onChange={this.handleChange}
                     onScroll={this.previewScroll}
                 />
@@ -137,7 +142,7 @@ class MarkdownEditor extends PureComponent {
 
 MarkdownEditor.defaultProps = {
     width: '90%',
-    height: 500,
+    height: '100%',
     classPrefix: 'zhique-markdown-'
 };
 

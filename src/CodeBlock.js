@@ -12,6 +12,7 @@ class CodeBlock extends Component {
                 language={language}
                 style={docco}
                 showLineNumbers
+                wrapLines
             >
                 {value}
             </SyntaxHighlighter>
