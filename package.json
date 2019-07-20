@@ -22,50 +22,43 @@
   "bugs": {
     "url": "https://github.com/zhique-design/zhique-editor/issues"
   },
-  "homepage": "https://github.com/zhique-design/zhique-editor#readme",
+  "homepage": "https://zhique-design.github.io/zhique-editor",
   "author": "徐昭 <xuzhao.zhique.design>",
   "license": "Apache-2.0",
   "private": false,
   "scripts": {
-    "build": "webpack --env.NODE_ENV=production",
-    "dev": "webpack-dev-server",
-    "deploy": "gh-pages-deploy"
-  },
-  "gh-pages-deploy": {
-    "noprompt": true,
-    "prep": [
-      "build:demo"
-    ],
-    "staticpath": "demo/dist"
+    "build": "webpack -p --env.NODE_ENV=production",
+    "start:demo": "webpack-dev-server -p --config webpack.config.dev.js",
+    "build:demo": "webpack -p --env.NODE_ENV=production --config webpack.config.dev.js",
+    "deploy": "npm run build:demo && gh-pages -d demo/dist"
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "codemirror": "^5.48.0",
+    "codemirror": "^5.48.2",
     "github-markdown-css": "^3.0.1",
-    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-codemirror2": "^6.0.0",
     "react-dom": "^16.8.6",
-    "react-markdown": "^4.0.8",
+    "react-markdown": "^4.1.0",
     "react-syntax-highlighter": "^11.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
-    "coveralls": "^3.0.3",
-    "css-loader": "^2.1.1",
-    "gh-pages-deploy": "^0.5.1",
+    "css-loader": "^3.1.0",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "path": "^0.12.7",
     "style-loader": "^0.23.1",
-    "webpack": "^4.31.0",
-    "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.3.1",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2",
     "webpack-node-externals": "^1.7.2"
   }
 }
