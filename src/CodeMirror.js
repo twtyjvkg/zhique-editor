@@ -2,15 +2,29 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Controlled as CodeMirror2 } from 'react-codemirror2';
 
+import 'codemirror/lib/codemirror';
+import 'codemirror/lib/codemirror.css';
+
+import 'codemirror/addon/fold/foldcode';
+import 'codemirror/addon/fold/foldgutter.css'
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/fold/comment-fold';
+import 'codemirror/addon/fold/indent-fold';
+import 'codemirror/addon/fold/markdown-fold';
+import 'codemirror/addon/fold/xml-fold';
+
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/addon/edit/closetag';
+import 'codemirror/addon/edit/matchtags';
+
 import 'codemirror/mode/gfm/gfm';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/groovy/groovy';
-
-import 'codemirror/lib/codemirror';
-import 'codemirror/lib/codemirror.css';
 
 import './CodeMirror.less';
 
@@ -103,6 +117,12 @@ CodeMirror.defaultProps = {
         theme: 'default',
         lineWrapping: true,
         lineNumbers: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        matchTags: true,
+        autoCloseTags: true,
     },
     fontSize: '13px',
 };
