@@ -2,8 +2,15 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Controlled as CodeMirror2 } from 'react-codemirror2';
 
+import 'codemirror/mode/gfm/gfm';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/jsx/jsx';
+import 'codemirror/mode/groovy/groovy';
+
+import 'codemirror/lib/codemirror';
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
 
 import './CodeMirror.less';
 

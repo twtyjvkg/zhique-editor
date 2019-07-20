@@ -1,33 +1,20 @@
 import React, { Component } from 'react';
-import highlight from 'highlight.js';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import PropTypes from 'prop-types';
 
 class CodeBlock extends Component {
 
-    componentDidMount() {
-        this.highlightCode();
-    }
-
-    componentDidUpdate() {
-        this.highlightCode();
-    }
-
-    setRef = el => {
-        this.codeEl = el;
-    };
-
-    highlightCode = () => {
-        highlight.highlightBlock(this.codeEl);
-    };
-
     render() {
         const { value, language } = this.props;
         return (
-            <pre>
-                <code ref={this.setRef} className={`language-${language}`}>
-                    {value}
-                </code>
-             </pre>
+            <SyntaxHighlighter
+                language={language}
+                style={docco}
+                showLineNumbers
+            >
+                {value}
+            </SyntaxHighlighter>
         );
     }
 }
