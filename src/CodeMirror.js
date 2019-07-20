@@ -87,6 +87,7 @@ class CodeMirror extends PureComponent{
                 ref={this.codeMirror}
                 editorDidMount={(editor) => {
                     editor.setSize('100%', '100%');
+                    editor.focus();
                     this.editor = editor;
                 }}
                 onBeforeChange={this.handleBeforeChange}
