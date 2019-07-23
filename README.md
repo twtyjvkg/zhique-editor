@@ -55,6 +55,12 @@ zhique-editor
           <li>修复一些bug</li>
         </ul>
       </li>
+      <li>
+              <strong>v0.2.2</strong>
+              <ul>
+                <li>修改模块调用方式</li>
+              </ul>
+            </li>
     </ul>
   </li>
 </ul>
@@ -76,7 +82,7 @@ yarn add @zhique-design/zhique-editor
 ## Basic usage
 
 ```typescript jsx
-import MarkdownEditor from '@zhique-design/zhique-editor';
+import { MarkdownEditor } from '@zhique-design/zhique-editor';
 
 <MarkdownEditor />
 ```

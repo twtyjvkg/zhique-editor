@@ -60,6 +60,12 @@ const value = "zhique-editor\n" +
     "          <li>修复一些bug</li>\n" +
     "        </ul>\n" +
     "      </li>\n" +
+    "      <li>\n" +
+    "              <strong>v0.2.2</strong>\n" +
+    "              <ul>\n" +
+    "                <li>修改模块调用方式</li>\n" +
+    "              </ul>\n" +
+    "            </li>\n" +
     "    </ul>\n" +
     "  </li>\n" +
     "</ul>\n" +
@@ -81,7 +87,7 @@ const value = "zhique-editor\n" +
     "## Basic usage\n" +
     "\n" +
     "```typescript jsx\n" +
-    "import MarkdownEditor from '@zhique-design/zhique-editor';\n" +
+    "import { MarkdownEditor } from '@zhique-design/zhique-editor';\n" +
     "\n" +
     "<MarkdownEditor />\n" +
     "```\n" +
