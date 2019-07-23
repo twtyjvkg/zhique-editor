@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const prod = process.env.NODE_ENV === 'production';
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
     mode: prod ? 'production' : 'development',
@@ -30,4 +31,5 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
         }),
     ],
+    externals: [nodeExternals()]
 };

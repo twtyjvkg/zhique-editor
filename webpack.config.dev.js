@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
-const cleanWebpackPlugin = require("clean-webpack-plugin");
+const cleanWebpackPlugin = require('clean-webpack-plugin');
 const prod = process.env.NODE_ENV === 'production';
 
 const config = {
@@ -31,7 +31,7 @@ const config = {
 
 if (prod) {
     config.plugins.push(
-      new cleanWebpackPlugin()
+      new cleanWebpackPlugin(['demo/dist'])
     );
     config.plugins.push(
         new miniCssExtractPlugin({

@@ -1,6 +1,6 @@
 {
   "name": "@zhique-design/zhique-editor",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "markdown editor as React components",
   "main": "dist/index.js",
   "keywords": [
@@ -23,7 +23,7 @@
     "url": "https://github.com/zhique-design/zhique-editor/issues"
   },
   "homepage": "https://zhique-design.github.io/zhique-editor",
-  "author": "徐昭 <xuzhao.zhique.design>",
+  "author": "徐昭 <xuzhao@zhique.design>",
   "license": "Apache-2.0",
   "private": false,
   "scripts": {
