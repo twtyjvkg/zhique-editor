@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const htmlWebpackPlugin = require('html-webpack-plugin');
+const miniCssExtractPlugin = require('mini-css-extract-plugin');
+const cleanWebpackPlugin = require("clean-webpack-plugin");
 const prod = process.env.NODE_ENV === 'production';
 
 const config = {
@@ -9,7 +11,7 @@ const config = {
     entry: [path.join(__dirname, 'demo', 'src', 'demo.js')],
     output: {
         path: path.resolve(__dirname, 'demo', 'dist'),
-        filename: 'index.js',
+        filename: '[name].[hash:8].js',
     },
     module: {
         rules: [
@@ -28,6 +30,14 @@ const config = {
 };
 
 if (prod) {
+    config.plugins.push(
+      new cleanWebpackPlugin()
+    );
+    config.plugins.push(
+        new miniCssExtractPlugin({
+            filename: miniCssExtractPlugin ? '[name].css' : '[name].[hash].css',
+        })
+    );
     config.plugins.push(
         new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')})
     );

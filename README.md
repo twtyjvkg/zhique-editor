@@ -3,21 +3,61 @@ zhique-editor
 
 [![Build Status](https://www.travis-ci.org/zhique-design/zhique-editor.svg?branch=master)](https://www.travis-ci.org/zhique-design/zhique-editor)
 
-**zhique-editor** : The open source online markdown editor (component), based on react & react-markdown & react-codemirror2.
+**zhique-editor** : The open source online code editor (component), based on react & react-markdown & react-codemirror2.
 
 ## Features
 
-- Support Standard Markdown / CommonMark and GFM (GitHub Flavored Markdown);
-- Full-featured: Real-time Preview, Code fold, Code syntax highlighting...;
+<ul>
+  <li>
+    <strong>v0.1.0</strong>
+    <ul>
+      <li>Support Standard Markdown / CommonMark and GFM (GitHub Flavored Markdown)</li>
+      <li>Real-time Preview, Code fold, Code syntax highlighting...</li>
+    </ul>
+  </li>
+  <li>
+    <strong>v0.2.0</strong>
+    <ul>
+      <li>Synchronized scrolling</li>
+      <li>ui refactoring</li>
+      <li>
+        <strong>v0.2.1</strong>
+        <ul>
+          <li>fixed some bug</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
 
 --------
 
-**zhique-editor** : 是一款开源的Markdown 在线编辑器（组件），基于 react、react-markdown 和 react-codemirror2 构建。
+**zhique-editor** : 是一款开源的在线代码编辑器（组件），基于 react、react-markdown 和 react-codemirror2 构建。
 
 ## 主要特性
 
-- 支持通用 Markdown / CommonMark 和 GFM (GitHub Flavored Markdown) 风格的语法，也可[变身为代码编辑器];
-- 支持实时预览、代码折叠和多语言语法高亮等功能；
+<ul>
+  <li>
+    <strong>v0.1.0</strong>
+    <ul>
+      <li>支持通用 Markdown / CommonMark 和 GFM (GitHub Flavored Markdown) 风格的语法</li>
+      <li>实时预览、代码折叠、语法高亮...</li>
+    </ul>
+  </li>
+  <li>
+    <strong>v0.2.0</strong>
+    <ul>
+      <li>同步滚动</li>
+      <li>UI重构</li>
+      <li>
+        <strong>v0.2.1</strong>
+        <ul>
+          <li>修复一些bug</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
 
 ## Installing
 
@@ -36,9 +76,9 @@ yarn add @zhique-design/zhique-editor
 ## Basic usage
 
 ```typescript jsx
-import ZhiQueEditor from '@zhique-design/zhique-editor';
+import MarkdownEditor from '@zhique-design/zhique-editor';
 
-<ZhiQueEditor />
+<MarkdownEditor />
 ```
 
 ## props

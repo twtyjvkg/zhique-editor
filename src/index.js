@@ -1,3 +1,7 @@
-import MarkdownEditor from './MarkdownEditor';
+import MarkdownEditor from './components/MarkdownEditor';
+import MarkDown from './components/MarkDown';
 
-export default MarkdownEditor;
+export {
+    MarkdownEditor,
+    MarkDown
+};

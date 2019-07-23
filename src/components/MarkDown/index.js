@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import CodeBlock from './CodeBlock';
+import CodeBlock from '../CodeBlock';
 
 import 'github-markdown-css/github-markdown.css';
 

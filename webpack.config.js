@@ -4,10 +4,12 @@ const prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
     mode: prod ? 'production' : 'development',
-    entry: './src/index.js',
+    entry: {
+        index: ['./src/index.js'],
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'index.js',
+        filename: '[name].js',
         libraryTarget: 'commonjs2'
     },
     module: {

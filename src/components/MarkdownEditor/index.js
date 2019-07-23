@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-import CodeMirror from './CodeMirror';
-import MarkDown from './MarkDown';
+import CodeMirror from '../CodeMirror';
+import MarkDown from '../MarkDown';
 
-import './MarkdownEditor.less';
+import './index.less';
 
 class MarkdownEditor extends PureComponent {
 
@@ -87,7 +87,7 @@ class MarkdownEditor extends PureComponent {
         const editor = this.editor.current;
         const codeView = editor.querySelector('.CodeMirror-scroll');
         if (scrollTop === 0) {
-            codeView.scrollTop = 0
+            codeView.scrollTop = 0;
         } else if (scrollTop + height >= scrollHeight) {
             codeView.scrollTop = scrollHeight;
         } else {
@@ -103,6 +103,8 @@ class MarkdownEditor extends PureComponent {
             height,
             ...props
         } = this.props;
+
+        delete props.value;
 
         const { _width, _height, text } = this.state;
         return (
@@ -144,7 +146,7 @@ class MarkdownEditor extends PureComponent {
 
 MarkdownEditor.defaultProps = {
     width: '90%',
-    height: '100%',
+    height: 500,
     classPrefix: 'zhique-markdown-'
 };
 

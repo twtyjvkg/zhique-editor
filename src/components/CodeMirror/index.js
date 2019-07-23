@@ -25,7 +25,7 @@ import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/groovy/groovy';
 
-import './CodeMirror.less';
+import './index.less';
 
 class CodeMirror extends PureComponent{
 
