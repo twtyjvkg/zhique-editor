@@ -49,9 +49,10 @@ class CodeMirror extends PureComponent{
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props !== prevProps) {
-            const { width, height, fontSize } = this.props;
+            const { width, height, fontSize, toolbar } = this.props;
             this.codeMirror.current.ref.style.width = typeof width === 'string' ? width : `${width}px`;
             this.codeMirror.current.ref.style.height = typeof height === 'string' ? height : `${height}px`;
+            this.codeMirror.current.ref.style.marginTop = toolbar ? `${toolbar.clientHeight + 1}px` : 0;
             this.codeMirror.current.ref.style.fontSize = fontSize;
         }
     }
@@ -122,6 +123,7 @@ CodeMirror.defaultProps = {
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
         matchBrackets: true,
+        autofocus: true,
         autoCloseBrackets: true,
         matchTags: true,
         autoCloseTags: true,
