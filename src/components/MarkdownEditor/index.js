@@ -12,32 +12,8 @@ import {
     faItalic
 } from '@fortawesome/free-solid-svg-icons';
 
-import CodeMirror from 'codemirror';
+import CodeEditor from '../CodeEditor';
 import MarkDown from '../MarkDown';
-
-import 'codemirror/lib/codemirror';
-import 'codemirror/lib/codemirror.css';
-
-import 'codemirror/addon/fold/foldcode';
-import 'codemirror/addon/fold/foldgutter.css'
-import 'codemirror/addon/fold/foldgutter';
-import 'codemirror/addon/fold/brace-fold';
-import 'codemirror/addon/fold/comment-fold';
-import 'codemirror/addon/fold/indent-fold';
-import 'codemirror/addon/fold/markdown-fold';
-import 'codemirror/addon/fold/xml-fold';
-
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/addon/edit/matchbrackets';
-import 'codemirror/addon/edit/closetag';
-import 'codemirror/addon/edit/matchtags';
-
-import 'codemirror/mode/gfm/gfm';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/jsx/jsx';
-import 'codemirror/mode/groovy/groovy';
 
 import './index.less';
 
@@ -46,16 +22,13 @@ class MarkdownEditor extends PureComponent {
     constructor(props) {
         super(props);
         const {
-            width,
-            height,
-            value,
+            value
         } = props;
         this.state = {
-            _width: width,
-            _height: height,
             text: value || '',
         };
         this.editor = React.createRef();
+        this.codeEditor = React.createRef();
         this.preview = React.createRef();
         this.previewContainer = React.createRef();
         this.toolbar = React.createRef();
@@ -64,39 +37,24 @@ class MarkdownEditor extends PureComponent {
 
 
     componentDidMount() {
-        this.initCodeEditor();
-        this.handleResize();
-        window.addEventListener('resize', this.handleResize);
+        this.init();
     }
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
-    }
-
-    initCodeEditor =() => {
-        const { options, fontSize } = this.props;
+    init = () => {
         const editor = this.editor.current;
-        const codeEditor = this.codeEditor = CodeMirror.fromTextArea(editor.querySelector('textarea'), options);
-        const codeMirror = this.codeMirror = editor.querySelector('.CodeMirror');
-        const { text } = this.state;
-        if (text !== '') codeEditor.setValue(text);
-        codeMirror.style.fontSize = fontSize;
-        codeMirror.style.width = '50%';
-    };
-
-    handleResize = () => {
-        const { clientWidth, clientHeight } = this.editor.current;
+        const { clientWidth, clientHeight } = editor;
         const toolbar = this.toolbar.current;
-        const codeMirror = this.codeMirror;
         const preview = this.preview.current;
         const previewContainer = this.previewContainer.current;
+        const codeWrapper = this.codeEditor.current.wrapper;
         previewContainer.style.padding = '20px';
         if (toolbar) {
-            preview.style.top = `${toolbar.clientHeight + 1}px`;
-            preview.style.width = `${clientWidth/2}px`;
+            preview.style.width = `${(clientWidth+1)/2}px`;
             preview.style.height = `${clientHeight-toolbar.clientHeight}px`;
-            codeMirror.style.height = `${clientHeight}px`;
-            codeMirror.style.marginTop = toolbar ? `${toolbar.clientHeight + 1}px` : 0;
+            preview.style.top = `${toolbar.clientHeight + 1}px`;
+            codeWrapper.style.width = `${(clientWidth+1)/2}px`;
+            codeWrapper.style.height = `${clientHeight-toolbar.clientHeight}px`;
+            codeWrapper.style.marginTop = toolbar ? `${toolbar.clientHeight + 1}px` : 0;
         }
     };
 
@@ -137,14 +95,13 @@ class MarkdownEditor extends PureComponent {
             scrollHeight
         } = e.currentTarget;
         const percent = scrollTop / scrollHeight;
-        const editor = this.editor.current;
-        const codeView = editor.querySelector('.CodeMirror-scroll');
+        const codeScroller = this.codeEditor.current.scroller;
         if (scrollTop === 0) {
-            codeView.scrollTop = 0;
+            codeScroller.scrollTop = 0;
         } else if (scrollTop + height >= scrollHeight) {
-            codeView.scrollTop = scrollHeight;
+            codeScroller.scrollTop = scrollHeight;
         } else {
-            codeView.scrollTop = scrollHeight * percent;
+            codeScroller.scrollTop = scrollHeight * percent;
         }
     };
 
@@ -159,7 +116,7 @@ class MarkdownEditor extends PureComponent {
         const { text } = this.state;
         const ToolbarMenu = ({ icon, title, text, onClick }) => (
             <li
-                onClick={e => onClick(e, this.codeEditor)}
+                onClick={e => onClick(e, this.codeEditor.current.editor)}
             >
                 <a>
                     <i className="fa" title={title}>{icon && <FontAwesomeIcon icon={icon} />}{text}</i>
@@ -172,9 +129,14 @@ class MarkdownEditor extends PureComponent {
                 style={{ width, height }}
                 ref={this.editor}
             >
-                <textarea id="test" />
+                <CodeEditor
+                    ref={this.codeEditor}
+                    value={text}
+                    onChange={this.handleChange}
+                    onScroll={this.previewScroll}
+                />
                 <div
-                    className={classNames(`${classPrefix}-preview`)}
+                    className={`${classPrefix}-preview`}
                     ref={this.preview}
                     onMouseOver={this.previewBindScroll}
                     onTouchStart={this.previewBindScroll}
@@ -232,23 +194,9 @@ class MarkdownEditor extends PureComponent {
 }
 
 MarkdownEditor.defaultProps = {
-    width: '90%',
-    height: 500,
     classPrefix: 'zhique-markdown',
-    options: {
-        mode: 'gfm',
-        theme: 'default',
-        lineWrapping: true,
-        lineNumbers: true,
-        foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-        matchBrackets: true,
-        autofocus: true,
-        autoCloseBrackets: true,
-        matchTags: true,
-        autoCloseTags: true,
-    },
-    fontSize: '13px',
+    width: '90%',
+    height: 500
 };
 
 MarkdownEditor.propTypes = {
