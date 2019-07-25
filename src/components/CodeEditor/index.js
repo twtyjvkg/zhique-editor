@@ -18,12 +18,18 @@ import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/matchtags';
 
+import 'codemirror/addon/selection/active-line';
+import 'codemirror/addon/selection/mark-selection';
+
 import 'codemirror/mode/gfm/gfm';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/groovy/groovy';
+
+
+import './index.less';
 
 class CodeEditor extends PureComponent{
 
@@ -42,7 +48,7 @@ class CodeEditor extends PureComponent{
     }
 
     init = () => {
-        const { options } = this.props;
+        const { options, fontSize } = this.props;
         const editorArea = this.editorArea.current;
         const codeEditor = CodeMirror.fromTextArea(
             editorArea,
@@ -54,6 +60,7 @@ class CodeEditor extends PureComponent{
                 wrapper
             }
         } = codeEditor;
+        wrapper.style.fontSize = fontSize;
         this.editor = codeEditor;
         this.scroller = scroller;
         this.wrapper = wrapper;
@@ -119,6 +126,8 @@ CodeEditor.defaultProps = {
         autoCloseBrackets: true,
         matchTags: true,
         autoCloseTags: true,
+        styleActiveLine: true,
+        styleSelectedText: true
     },
 };
 
