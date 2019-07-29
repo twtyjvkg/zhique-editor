@@ -5,14 +5,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import {
     faImage,
-    faClock, faNewspaper, faEyeSlash, faEye
+    faClock,
+    faNewspaper
 } from '@fortawesome/free-regular-svg-icons';
 import {
     faUndo,
     faRedo,
     faBold,
     faStrikethrough,
-    faItalic, faQuoteLeft, faListUl, faListOl, faMinus, faLink, faAnchor, faCode, faTable, faTerminal
+    faItalic,
+    faQuoteLeft,
+    faListUl,
+    faListOl,
+    faMinus,
+    faLink,
+    faAnchor,
+    faCode,
+    faTable,
+    faTerminal, faArrowsAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import CodeEditor from '../CodeEditor';
@@ -28,11 +38,13 @@ class MarkdownEditor extends PureComponent {
         super(props);
         const {
             value,
-            watch
+            watch,
+            fullScreen
         } = props;
         this.state = {
             text: value || '',
-            watch
+            watch,
+            fullScreen
         };
         this.editor = React.createRef();
         this.codeEditor = React.createRef();
@@ -42,27 +54,57 @@ class MarkdownEditor extends PureComponent {
         this.dialog = React.createRef();
     }
 
-
-
     componentDidMount() {
-        this.init();
+        this.resize();
     }
 
-    init = () => {
+    resize = () => {
+        const { width, height } = this.props;
+        const { fullScreen, watch } = this.state;
         const editor = this.editor.current;
-        const { clientWidth, clientHeight } = editor;
         const toolbar = this.toolbar.current;
         const preview = this.preview.current;
         const previewContainer = this.previewContainer.current;
         const codeWrapper = this.codeEditor.current.wrapper;
-        previewContainer.style.padding = '20px';
+        if (fullScreen) {
+            editor.style.width = `${window.innerWidth}px`;
+            editor.style.height = `${window.innerHeight}px`;
+            window.addEventListener('keyup', this.handleEsc);
+        } else {
+            editor.style.width = typeof width === 'string' ? width : `${width}px`;
+            editor.style.height = typeof height === 'string' ? height : `${height}px`;
+            window.removeEventListener('keyup', this.handleEsc);
+        }
+        const { clientWidth, clientHeight } = editor;
         if (toolbar) {
-            preview.style.width = `${(clientWidth+1)/2}px`;
-            preview.style.height = `${clientHeight-toolbar.clientHeight}px`;
-            preview.style.top = `${toolbar.clientHeight + 1}px`;
-            codeWrapper.style.width = `${(clientWidth+1)/2}px`;
             codeWrapper.style.height = `${clientHeight-toolbar.clientHeight}px`;
-            codeWrapper.style.marginTop = toolbar ? `${toolbar.clientHeight}px` : 0;
+            preview.style.height = `${clientHeight-toolbar.clientHeight}px`;
+            preview.style.top = `${toolbar.clientHeight+1}px`;
+        } else {
+            codeWrapper.style.height = `${clientHeight}px`;
+        }
+
+        codeWrapper.style.marginTop = toolbar ? `${toolbar.clientHeight+1}px` : 0;
+
+        if (watch) {
+            preview.style.width = `${(clientWidth+1)/2}px`;
+            codeWrapper.style.width = `${(clientWidth+1)/2}px`;
+            previewContainer.style.padding = '20px';
+        } else {
+            codeWrapper.style.width = `${clientWidth}px`;
+        }
+    };
+
+    handleEsc = e => {
+        if (!e.shiftKey && e.keyCode === 27) {
+            const { fullScreen } = this.state;
+            if (fullScreen) {
+                this.setState({
+                    fullScreen: false,
+                }, () => {
+                    this.resize();
+                })
+            }
         }
     };
 
@@ -630,6 +672,19 @@ class MarkdownEditor extends PureComponent {
                     });
                 }
             },
+            {
+                title: '全屏（按ESC还原）',
+                icon: faArrowsAlt,
+                onClick: (editor) => {
+                    const { fullScreen } = this.state;
+                    this.setState({
+                        fullScreen: !fullScreen
+                    }, () => {
+                        this.resize();
+                    });
+
+                }
+            },
         ];
 
         return (
@@ -665,10 +720,10 @@ class MarkdownEditor extends PureComponent {
             height,
         } = this.props;
 
-        const { text, watch } = this.state;
+        const { text, watch, fullScreen } = this.state;
         return (
             <div
-                className={classPrefix}
+                className={classNames(classPrefix, fullScreen ? `${classPrefix}-fullscreen` : '')}
                 style={{ width, height }}
                 ref={this.editor}
             >
@@ -712,6 +767,7 @@ MarkdownEditor.defaultProps = {
     width: '90%',
     height: 500,
     watch: true,
+    fullScreen: false,
     dateFormat: 'YYYY年MM月DD日 dddd'
 };
 
