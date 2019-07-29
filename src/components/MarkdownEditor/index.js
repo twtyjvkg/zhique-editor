@@ -2,18 +2,23 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import moment from 'moment';
 import {
+    faImage,
+    faClock, faNewspaper, faEyeSlash, faEye
 } from '@fortawesome/free-regular-svg-icons';
 import {
     faUndo,
     faRedo,
     faBold,
     faStrikethrough,
-    faItalic, faQuoteLeft, faListUl, faListOl, faMinus, faLink
+    faItalic, faQuoteLeft, faListUl, faListOl, faMinus, faLink, faAnchor, faCode, faTable, faTerminal
 } from '@fortawesome/free-solid-svg-icons';
 
 import CodeEditor from '../CodeEditor';
 import MarkDown from '../MarkDown';
+
+import Dialog from '../../plugins/Dialog';
 
 import './index.less';
 
@@ -22,16 +27,19 @@ class MarkdownEditor extends PureComponent {
     constructor(props) {
         super(props);
         const {
-            value
+            value,
+            watch
         } = props;
         this.state = {
             text: value || '',
+            watch
         };
         this.editor = React.createRef();
         this.codeEditor = React.createRef();
         this.preview = React.createRef();
         this.previewContainer = React.createRef();
         this.toolbar = React.createRef();
+        this.dialog = React.createRef();
     }
 
 
@@ -54,7 +62,7 @@ class MarkdownEditor extends PureComponent {
             preview.style.top = `${toolbar.clientHeight + 1}px`;
             codeWrapper.style.width = `${(clientWidth+1)/2}px`;
             codeWrapper.style.height = `${clientHeight-toolbar.clientHeight}px`;
-            codeWrapper.style.marginTop = toolbar ? `${toolbar.clientHeight + 1}px` : 0;
+            codeWrapper.style.marginTop = toolbar ? `${toolbar.clientHeight}px` : 0;
         }
     };
 
@@ -74,9 +82,9 @@ class MarkdownEditor extends PureComponent {
         if (top === 0) {
             preview.scrollTop = 0
         } else if (top + height >= scrollHeight - 16) {
-            preview.scrollTop = scrollHeight;
+            preview.scrollTop = preview.scrollHeight;
         } else {
-            preview.scrollTop = scrollHeight * percent;
+            preview.scrollTop = preview.scrollHeight * percent;
         }
     };
 
@@ -99,9 +107,9 @@ class MarkdownEditor extends PureComponent {
         if (scrollTop === 0) {
             codeScroller.scrollTop = 0;
         } else if (scrollTop + height >= scrollHeight) {
-            codeScroller.scrollTop = scrollHeight;
+            codeScroller.scrollTop = codeScroller.scrollHeight;
         } else {
-            codeScroller.scrollTop = scrollHeight * percent;
+            codeScroller.scrollTop = codeScroller.scrollHeight * percent;
         }
     };
 
@@ -112,6 +120,7 @@ class MarkdownEditor extends PureComponent {
     initToolbarMenu = () => {
 
         const { classPrefix } = this.props;
+        const { watch } = this.state;
         const menuList = [
             {
                 title: '撤销（Ctrl+Z）',
@@ -361,21 +370,278 @@ class MarkdownEditor extends PureComponent {
                 title: '链接',
                 icon: faLink,
                 onClick: (editor) => {
-                    editor.focus();
-
+                    const selection = editor.getSelection();
+                    const dialog = Dialog.showLinkDialog({
+                        classPrefix: classPrefix,
+                        editor: this.editor.current,
+                        contentProps: {
+                            selection
+                        },
+                        buttons: [
+                            {
+                                text: '确定',
+                                type: 'enter',
+                                onClick: () => {
+                                    const { container } = dialog.props;
+                                    const url = container.querySelector('[data-url]').value;
+                                    const title = container.querySelector('[data-title]').value;
+                                    let str = '';
+                                    if (title && title !=='') {
+                                        str = `[${title !== '' ? title : url}](${url} "${title}")`;
+                                    } else {
+                                        str = `[${url}](${url})`
+                                    }
+                                    editor.replaceSelection(str);
+                                    editor.focus();
+                                    dialog.destroy();
+                                }
+                            },
+                            {
+                                text: '取消',
+                                type: 'cancel',
+                                onClick: () => {
+                                    dialog.destroy();
+                                }
+                            }
+                        ]
+                    });
                 }
-            }
+            },
+            {
+                title: '引用链接',
+                icon: faAnchor,
+                onClick: (editor) => {
+                    const selection = editor.getSelection();
+                    const dialog = Dialog.showReferenceLinkDialog({
+                        classPrefix: classPrefix,
+                        editor: this.editor.current,
+                        contentProps: {
+                            selection
+                        },
+                        buttons: [
+                            {
+                                text: '确定',
+                                type: 'enter',
+                                onClick: () => {
+                                    const { container } = dialog.props;
+                                    const url = container.querySelector('[data-url]').value;
+                                    const title = container.querySelector('[data-title]').value;
+                                    const name = container.querySelector('[data-name]').value;
+                                    const rid = container.querySelector('[data-url-id]').value;
+                                    const cursor = editor.getCursor();
+                                    const selection = editor.getSelection();
+                                    editor.replaceSelection(`[${name}][${rid}]`);
+                                    if (selection === '') {
+                                        editor.setCursor(cursor.line, cursor.ch+1);
+                                    }
+                                    editor.setValue(`${editor.getValue()}\n[${rid}]: ${url} ${title === '' ? '' : `"${title}"`}`);
+                                    editor.focus();
+                                    dialog.destroy();
+                                }
+                            },
+                            {
+                                text: '取消',
+                                type: 'cancel',
+                                onClick: () => {
+                                    dialog.destroy();
+                                }
+                            }
+                        ]
+                    });
+                }
+            },
+            {
+                title: '添加图片',
+                icon: faImage,
+                onClick: (editor) => {
+                    const { imageUploadURL } = this.props;
+                    const selection = editor.getSelection();
+                    const dialog = Dialog.showImageDialog({
+                        classPrefix: classPrefix,
+                        editor: this.editor.current,
+                        action: imageUploadURL,
+                        contentProps: {
+                            selection
+                        },
+                        buttons: [
+                            {
+                                text: '确定',
+                                type: 'enter',
+                                onClick: () => {
+                                    const { container } = dialog.props;
+                                    const url = container.querySelector('[data-url]').value;
+                                    const alt = container.querySelector('[data-alt]').value;
+                                    const link = container.querySelector('[data-link]').value;
+                                    const cursor = editor.getCursor();
+                                    const altAttr = alt !== '' ? `"${alt}"` : '';
+                                    if (link === '' || link === 'http://') {
+                                        editor.replaceSelection(`![${alt}](${url}) ${altAttr}`)
+                                    } else {
+                                        editor.replaceSelection(`[![${alt}](${url} ${altAttr})](${link} ${altAttr})`)
+                                    }
+                                    if (alt === '') {
+                                        editor.setCursor(cursor.line, cursor.ch + 2);
+                                    }
+                                    editor.focus();
+                                    dialog.destroy();
+                                }
+                            },
+                            {
+                                text: '取消',
+                                type: 'cancel',
+                                onClick: () => {
+                                    dialog.destroy();
+                                }
+                            }
+                        ]
+                    });
+                }
+            },
+            {
+                title: '行内代码',
+                icon: faCode,
+                onClick: (editor) => {
+                    editor.focus();
+                    const cursor = editor.getCursor();
+                    const selection = editor.getSelection();
+                    editor.replaceSelection(`\`${selection}\``);
+                    if (selection === '') {
+                        editor.setCursor(cursor.line, cursor.ch+1);
+                    }
+                }
+            },
+            {
+                title: '表格',
+                icon: faTable,
+                onClick: (editor) => {
+                    const dialog = Dialog.showTableDialog({
+                        classPrefix: classPrefix,
+                        editor: this.editor.current,
+                        buttons: [
+                            {
+                                text: '确定',
+                                type: 'enter',
+                                onClick: () => {
+                                    const { container } = dialog.props;
+                                    const rows = container.querySelector('[data-rows]').value;
+                                    const cols = container.querySelector('[data-cols]').value;
+                                    const align = container.querySelector('[name="table-align"]:checked').value;
+                                    let table = '';
+                                    const hrLine = "------------";
+                                    const alignSign = {
+                                      default: hrLine,
+                                      left: `:${hrLine}`,
+                                      center: `:${hrLine}:`,
+                                      right: `${hrLine}:`
+                                    };
+                                    if (rows > 1 && cols > 0) {
+                                        for (let r = 0, len = rows; r < len; r++) {
+                                            const row = [];
+                                            const head = [];
+                                            for (let c = 0, len2 = cols; c < len2; c++) {
+                                                if (r === 1) {
+                                                    head.push(alignSign[align])
+                                                }
+                                                row.push(' ');
+                                            }
+                                            if (r === 1) {
+                                                table += `| ${head.join(' | ')} |\n`;
+                                            }
+                                            table += `| ${row.join(cols === 1 ? '' : ' | ')} |\n`;
+                                        }
+                                    }
+                                    editor.replaceSelection(table);
+                                    editor.focus();
+                                    dialog.destroy();
+                                }
+                            },
+                            {
+                                text: '取消',
+                                type: 'cancel',
+                                onClick: () => {
+                                    dialog.destroy();
+                                }
+                            }
+                        ]
+                    });
+                }
+            },
+            {
+                title: '日期时间',
+                icon: faClock,
+                onClick: (editor) => {
+                    const { dateFormat } = this.props;
+                    editor.focus();
+                    moment.locale(navigator.userLanguage||navigator.language);
+                    editor.replaceSelection(moment().format(dateFormat));
+                }
+            },
+            {
+                title: '插入分页符',
+                icon: faNewspaper,
+                onClick: (editor) => {
+                    editor.focus();
+                    editor.replaceSelection('\r\n[========]\r\n');
+                }
+            },
+            '|',
+            {
+                title: '跳转到行',
+                icon: faTerminal,
+                onClick: (editor) => {
+                    const dialog = Dialog.showGotoLineDialog({
+                        classPrefix: classPrefix,
+                        editor: this.editor.current,
+                        contentProps: {
+                            lineCount: editor.lineCount()
+                        },
+                        buttons: [
+                            {
+                                text: '确定',
+                                type: 'enter',
+                                onClick: () => {
+                                    const { container } = dialog.props;
+                                    const line = container.querySelector('[data-line-number]').value;
+                                    editor.setCursor({ line: line-1, ch: 0 });
+                                    const scrollInfo = editor.getScrollInfo();
+                                    const clientHeight = scrollInfo.clientHeight;
+                                    const coords = editor.charCoords({ line: line-1, ch: 0 }, 'local');
+                                    editor.scrollTo(null, (coords.top + coords.bottom - clientHeight) / 2);
+                                    const codeScroller = this.codeEditor.current.scroller;
+                                    const {
+                                        clientHeight: height,
+                                        scrollTop,
+                                        scrollHeight
+                                    } = codeScroller;
+                                    const percent = scrollTop / scrollHeight;
+                                    this.previewScroll(scrollTop, scrollHeight, height, percent);
+                                    editor.focus();
+                                    dialog.destroy();
+                                }
+                            },
+                            {
+                                text: '取消',
+                                type: 'cancel',
+                                onClick: () => {
+                                    dialog.destroy();
+                                }
+                            }
+                        ]
+                    });
+                }
+            },
         ];
 
         return (
             <ul className={`${classPrefix}-menu`}>
-                {menuList.map(item => {
+                {menuList.map((item, index) => {
                     if (typeof item === 'string') {
-                        return <li className="divider">{item}</li>
+                        return <li className="divider" key={index}/>
                     } else {
                         const { icon, title, text, onClick } = item;
                         return (
                             <li
+                                key={index}
                                 onClick={() => onClick(this.codeEditor.current.editor)}
                             >
                                 <a>
@@ -399,7 +665,7 @@ class MarkdownEditor extends PureComponent {
             height,
         } = this.props;
 
-        const { text } = this.state;
+        const { text, watch } = this.state;
         return (
             <div
                 className={classPrefix}
@@ -412,23 +678,25 @@ class MarkdownEditor extends PureComponent {
                     onChange={this.handleChange}
                     onScroll={this.previewScroll}
                 />
-                <div
-                    className={`${classPrefix}-preview`}
-                    ref={this.preview}
-                    onMouseOver={this.previewBindScroll}
-                    onTouchStart={this.previewBindScroll}
-                    onMouseOut={this.previewUnbindScroll}
-                    onTouchEnd={this.previewUnbindScroll}
-                >
+                {watch && (
                     <div
-                        className={classNames('markdown-body', `${classPrefix}preview-container`)}
-                        ref={this.previewContainer}
+                        className={`${classPrefix}-preview`}
+                        ref={this.preview}
+                        onMouseOver={this.previewBindScroll}
+                        onTouchStart={this.previewBindScroll}
+                        onMouseOut={this.previewUnbindScroll}
+                        onTouchEnd={this.previewUnbindScroll}
                     >
-                        <MarkDown
-                            value={text}
-                        />
+                        <div
+                            className={classNames('markdown-body', `${classPrefix}preview-container`)}
+                            ref={this.previewContainer}
+                        >
+                            <MarkDown
+                                value={text}
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
                 <div className={`${classPrefix}-toolbar`} ref={this.toolbar}>
                     <div className={`${classPrefix}-toolbar-container`}>
                         {this.initToolbarMenu()}
@@ -442,7 +710,9 @@ class MarkdownEditor extends PureComponent {
 MarkdownEditor.defaultProps = {
     classPrefix: 'zhique-markdown',
     width: '90%',
-    height: 500
+    height: 500,
+    watch: true,
+    dateFormat: 'YYYY年MM月DD日 dddd'
 };
 
 MarkdownEditor.propTypes = {

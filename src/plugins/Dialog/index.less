@@ -1,0 +1,146 @@
+.zhique-markdown-dialog {
+  color: #666;
+  position: fixed;
+  z-index: 999999;
+  display: none;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+  background: #fff;
+  font-size: 14px;
+
+  .zhique-markdown-dialog-header {
+    padding: 11px 20px;
+    border-bottom: 1px solid #eee;
+    transition: background 300ms ease-out;
+
+    &:hover {
+      background: #f6f6f6;
+    }
+  }
+
+  .zhique-markdown-dialog-close {
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    transition: color 300ms ease-out;
+  }
+
+  .zhique-markdown-dialog-container {
+    position: relative;
+    padding: 20px;
+    line-height: 1.4;
+
+    .zhique-markdown-form {
+      color: #666;
+
+      .zhique-markdown-file-input {
+        width: 75px;
+        height: 32px;
+        margin-left: 8px;
+        position: relative;
+        display: inline-block;
+
+        input[type=file] {
+          width: 75px;
+          height: 32px;
+          opacity: 0;
+          cursor: pointer;
+          background: #000;
+          display: inline-block;
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+        &:hover {
+          input[type=submit] {
+            background: #eee;
+          }
+        }
+      }
+
+      iframe {
+        display: none;
+      }
+
+      div {
+        &:not(:last-child) {
+          margin-bottom: 15px;
+        }
+      }
+
+      label {
+        float: left;
+        display: block;
+        width: 75px;
+        text-align: left;
+        padding: 7px 0 7px 5px;
+        margin: 0 0 2px;
+        font-weight: normal;
+      }
+
+      input[type=text], input[type=number] {
+        display: inline-block;
+        width: 264px;
+        color: #999;
+        padding: 8px;
+        border: 1px solid #ddd;
+      }
+
+      input[type=number] {
+        padding: 6px 8px;
+      }
+
+      .fa-btns {
+        display: inline-block;
+
+        a {
+          color: #999;
+          padding: 7px 10px 0 0;
+          display: inline-block;
+          text-decoration: none;
+          text-align: center;
+        }
+
+        label {
+          float: none;
+          display: inline-block;
+          width: auto;
+          text-align: left;
+          padding: 0 0 0 5px;
+          cursor: pointer;
+        }
+
+      }
+
+    }
+
+    input[type=submit], .zhique-markdown-btn {
+      color: #666;
+      min-width: 75px;
+      cursor: pointer;
+      background: #fff;
+      padding: 7px 10px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      transition: background 300ms ease-out;
+
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+
+      &:hover {
+        background: #eee;
+      }
+    }
+
+    .zhique-markdown-dialog-footer {
+      padding: 10px 0 0 0;
+      text-align: right;
+
+    }
+
+  }
+
+}

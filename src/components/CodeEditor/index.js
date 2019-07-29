@@ -107,7 +107,7 @@ class CodeEditor extends PureComponent{
         const { text } = this.state;
 
         return (
-            <textarea ref={this.editorArea} value={text} />
+            <textarea ref={this.editorArea} defaultValue={text} />
         );
     }
 }

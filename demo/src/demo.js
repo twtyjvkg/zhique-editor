@@ -105,4 +105,4 @@ const value = "zhique-editor\n" +
     "|------------|---------------------------------------|\n" +
     "| `onChange` | the component value has been changed  |\n";
 
-ReactDom.render(<MarkdownEditor id="test-editor" value={value} />, document.getElementById('app'));
+ReactDom.render(<MarkdownEditor id="test-editor" value={value} imageUploadURL="http://localhost:8000/api/v1/attachment/image" />, document.getElementById('app'));
