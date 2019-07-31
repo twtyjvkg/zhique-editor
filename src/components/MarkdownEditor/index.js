@@ -22,7 +22,8 @@ import {
     faAnchor,
     faCode,
     faTable,
-    faTerminal, faArrowsAlt
+    faTerminal,
+    faArrowsAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import CodeEditor from '../CodeEditor';
