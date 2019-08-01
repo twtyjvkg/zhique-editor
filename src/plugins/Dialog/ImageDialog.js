@@ -1,23 +1,31 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component } from 'react';
 
 class ImageDialog extends Component {
 
     filePath = React.createRef();
 
     handleFileChange = e => {
-        const { action } = this.props;
+        const { imageUploadProps: {
+            fieldName='image',
+            header,
+            uploadUrl,
+            uploadCallback
+        } } = this.props;
         const file = e.target.files[0];
         const formData = new FormData();
-        formData.append('image', file);
-        fetch(action, {
+        formData.append(fieldName, file);
+        fetch(uploadUrl, {
             method: 'post',
-            body: formData
+            body: formData,
+            header
         })
             .then(response => response.json())
             .catch(error => console.log(error))
             .then(response => {
-                const filePath = this.filePath.current;
-                filePath.value = `${action}?image_id=${response.file_id}`;
+                if (uploadCallback) {
+                    const filePath = this.filePath.current;
+                    filePath.value = uploadCallback(response);
+                }
             })
     };
 

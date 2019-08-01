@@ -163,7 +163,6 @@ class MarkdownEditor extends PureComponent {
     initToolbarMenu = () => {
 
         const { classPrefix } = this.props;
-        const { watch } = this.state;
         const menuList = [
             {
                 title: '撤销（Ctrl+Z）',
@@ -497,12 +496,12 @@ class MarkdownEditor extends PureComponent {
                 title: '添加图片',
                 icon: faImage,
                 onClick: (editor) => {
-                    const { imageUploadURL } = this.props;
+                    const { imageUploadProps } = this.props;
                     const selection = editor.getSelection();
                     const dialog = Dialog.showImageDialog({
                         classPrefix: classPrefix,
                         editor: this.editor.current,
-                        action: imageUploadURL,
+                        imageUploadProps,
                         contentProps: {
                             selection
                         },
@@ -719,6 +718,7 @@ class MarkdownEditor extends PureComponent {
             classPrefix,
             width,
             height,
+            codeMirrorProps
         } = this.props;
 
         const { text, watch, fullScreen } = this.state;
@@ -731,6 +731,7 @@ class MarkdownEditor extends PureComponent {
                 <CodeEditor
                     ref={this.codeEditor}
                     value={text}
+                    codeMirrorProps={codeMirrorProps}
                     onChange={this.handleChange}
                     onScroll={this.previewScroll}
                 />

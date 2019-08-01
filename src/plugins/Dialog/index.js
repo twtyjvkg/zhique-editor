@@ -165,12 +165,12 @@ Dialog.showImageDialog = props => {
         title='添加图片',
         imageUpload=true,
         width=(imageUpload ? 465 : 380),
-        action,
+        imageUploadProps,
         height=254
     } = props;
     return  Dialog.showDialog({
         ...props,
-        content: <ImageDialog action={action} classPrefix={classPrefix} imageUpload={imageUpload} {...contentProps} />,
+        content: <ImageDialog imageUploadProps={imageUploadProps} classPrefix={classPrefix} imageUpload={imageUpload} {...contentProps} />,
         title,
         width,
         height,

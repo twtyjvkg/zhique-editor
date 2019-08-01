@@ -28,7 +28,6 @@ import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/groovy/groovy';
 
-
 import './index.less';
 
 class CodeEditor extends PureComponent{
@@ -48,11 +47,11 @@ class CodeEditor extends PureComponent{
     }
 
     init = () => {
-        const { options, fontSize } = this.props;
+        const { options, fontSize, codeMirrorProps } = this.props;
         const editorArea = this.editorArea.current;
         const codeEditor = CodeMirror.fromTextArea(
             editorArea,
-            options
+            {...options, ...codeMirrorProps}
         );
         const {
             display: {

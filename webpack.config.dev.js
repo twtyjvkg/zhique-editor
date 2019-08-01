@@ -31,7 +31,7 @@ const config = {
 
 if (prod) {
     config.plugins.push(
-      new cleanWebpackPlugin(['demo/dist'])
+      new cleanWebpackPlugin(['./demo/dist'])
     );
     config.plugins.push(
         new miniCssExtractPlugin({

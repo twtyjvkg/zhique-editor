@@ -8,67 +8,14 @@ const value = "zhique-editor\n" +
     "\n" +
     "[![Build Status](https://www.travis-ci.org/zhique-design/zhique-editor.svg?branch=master)](https://www.travis-ci.org/zhique-design/zhique-editor)\n" +
     "\n" +
-    "**zhique-editor** : The open source online code editor (component), based on react & react-markdown & react-codemirror2.\n" +
+    "**zhique-editor** : The open source online code editor (component), based on [react](https://reactjs.org/ \"react\") & [react-markdown](http://rexxars.github.io/react-markdown/ \"react-markdown\") & [codemirror](https://codemirror.net/ \"codemirror\").\n" +
     "\n" +
     "## Features\n" +
     "\n" +
-    "<ul>\n" +
-    "  <li>\n" +
-    "    <strong>v0.1.0</strong>\n" +
-    "    <ul>\n" +
-    "      <li>Support Standard Markdown / CommonMark and GFM (GitHub Flavored Markdown)</li>\n" +
-    "      <li>Real-time Preview, Code fold, Code syntax highlighting...</li>\n" +
-    "    </ul>\n" +
-    "  </li>\n" +
-    "  <li>\n" +
-    "    <strong>v0.2.0</strong>\n" +
-    "    <ul>\n" +
-    "      <li>Synchronized scrolling</li>\n" +
-    "      <li>ui refactoring</li>\n" +
-    "      <li>\n" +
-    "        <strong>v0.2.1</strong>\n" +
-    "        <ul>\n" +
-    "          <li>fixed some bug</li>\n" +
-    "        </ul>\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
-    "  </li>\n" +
-    "</ul>\n" +
-    "\n" +
-    "--------\n" +
-    "\n" +
-    "**zhique-editor** : 是一款开源的在线代码编辑器（组件），基于 react、react-markdown 和 react-codemirror2 构建。\n" +
-    "\n" +
-    "## 主要特性\n" +
-    "\n" +
-    "<ul>\n" +
-    "  <li>\n" +
-    "    <strong>v0.1.0</strong>\n" +
-    "    <ul>\n" +
-    "      <li>支持通用 Markdown / CommonMark 和 GFM (GitHub Flavored Markdown) 风格的语法</li>\n" +
-    "      <li>实时预览、代码折叠、语法高亮...</li>\n" +
-    "    </ul>\n" +
-    "  </li>\n" +
-    "  <li>\n" +
-    "    <strong>v0.2.0</strong>\n" +
-    "    <ul>\n" +
-    "      <li>同步滚动</li>\n" +
-    "      <li>UI重构</li>\n" +
-    "      <li>\n" +
-    "        <strong>v0.2.1</strong>\n" +
-    "        <ul>\n" +
-    "          <li>修复一些bug</li>\n" +
-    "        </ul>\n" +
-    "      </li>\n" +
-    "      <li>\n" +
-    "              <strong>v0.2.2</strong>\n" +
-    "              <ul>\n" +
-    "                <li>修改模块调用方式</li>\n" +
-    "              </ul>\n" +
-    "            </li>\n" +
-    "    </ul>\n" +
-    "  </li>\n" +
-    "</ul>\n" +
+    "- Support Standard Markdown / CommonMark and GFM (GitHub Flavored Markdown)\n" +
+    "- Real-time Preview, Code fold, Code syntax highlighting...\n" +
+    "- Synchronized scrolling\n" +
+    "- toolbar for markdown\n" +
     "\n" +
     "## Installing\n" +
     "\n" +
@@ -84,25 +31,61 @@ const value = "zhique-editor\n" +
     "yarn add @zhique-design/zhique-editor\n" +
     "```\n" +
     "\n" +
-    "## Basic usage\n" +
+    "------------\n" +
     "\n" +
-    "```typescript jsx\n" +
-    "import { MarkdownEditor } from '@zhique-design/zhique-editor';\n" +
+    "MarkdownEditor\n" +
+    "--------------\n" +
+    "1. **Basic usage**\n" +
     "\n" +
-    "<MarkdownEditor />\n" +
-    "```\n" +
+    "  ```typescript jsx\n" +
+    "  import React from 'react';\n" +
+    "  import ReactDom from 'react-dom';\n" +
+    "  import { MarkdownEditor } from '@zhique-design/zhique-editor';\n" +
+    "  ReactDom.render(<MarkdownEditor />, document.getElementById('app'));\n" +
+    "  ```\n" +
+    "2. **props**\n" +
     "\n" +
-    "## props\n" +
+    "  |  prop\t | description | type  | default  |\n" +
+    "  | :------------: | :------------: | :------------: | :------------: |\n" +
+    "  |  `classPrefix` |  component class prefix | string |  `zhique-markdown` |\n" +
+    "  |  `width` |  component width |  string or number |  `90%` |\n" +
+    "  |  `height` |  component height |  string or number | `500`  |\n" +
+    "  |  `watch` |  Real-time Preview |  bool | `true`  |\n" +
+    "  |  `fullScreen` |  fullScreen mode |  bool |  `false` |\n" +
+    "  | `dateFormat`  | date format  | string  | `YYYY年MM月DD日 dddd`  |\n" +
+    "  |  `value` | component value  |  string | `''`  |\n" +
+    "  |  `imageUploadProps` |  the props of iamge upload dialog | object  |  - |\n" +
+    "  | `codeMirrorProps` | the props of codeMirror | object | - |\n" +
+    "  |  `onChange` |  the component value has been changed |  function(value) |  - |\n" +
+    "  \n" +
+    "3. **imageUploadProps**\n" +
     "\n" +
-    "| prop     | type&nbsp;*`default`*              | description      |\n" +
-    "|----------|------------------------------------|------------------|\n" +
-    "| `value`  | string&nbsp;*`''`*                 | component value  |\n" +
-    "| `height` | number or string &nbsp;*`500`*     | component height |\n" +
+    " |  prop\t | description | type  | default  |\n" +
+    "  | :------------: | :------------: | :------------: | :------------: |\n" +
+    "  | `fieldName` | the name of image field | string | `image` |\n" +
+    "  | `header` | the request header | object | - |\n" +
+    "|  `uploadUrl` |  image upload url |  string |  - |\n" +
+    "|  `uploadCallback` |  image upload callback | function(response)  |  - |\n" +
     "\n" +
-    "## events\n" +
+    "4. **codeMirrorProps**\n" +
     "\n" +
-    "| event      | description                           |\n" +
-    "|------------|---------------------------------------|\n" +
-    "| `onChange` | the component value has been changed  |\n";
+    "  ```clike\n" +
+    "  {\n" +
+    "    mode: 'gfm',\n" +
+    "    theme: 'default',\n" +
+    "    lineWrapping: true,\n" +
+    "    lineNumbers: true,\n" +
+    "    foldGutter: true,\n" +
+    "    gutters: [\"CodeMirror-linenumbers\", \"CodeMirror-foldgutter\"],\n" +
+    "    matchBrackets: true,\n" +
+    "    autofocus: true,\n" +
+    "    autoCloseBrackets: true,\n" +
+    "    matchTags: true,\n" +
+    "    autoCloseTags: true,\n" +
+    "    styleActiveLine: true,\n" +
+    "    styleSelectedText: true\n" +
+    "  }\n" +
+    "  ```\n" +
+    "  click [codemirror configuration](https://codemirror.net/doc/manual.html#config \"codemirror configuration\") for more info.\n";
 
 ReactDom.render(<MarkdownEditor id="test-editor" value={value} imageUploadURL="http://localhost:8000/api/v1/attachment/image" />, document.getElementById('app'));
