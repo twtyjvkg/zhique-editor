@@ -6,26 +6,38 @@ class ImageDialog extends Component {
 
     handleFileChange = e => {
         const { imageUploadProps: {
-            fieldName='image',
-            header,
-            uploadUrl,
-            uploadCallback
+            fieldName='file',
+            headers,
+            url,
+            onSuccess,
+            onError,
         } } = this.props;
         const file = e.target.files[0];
         const formData = new FormData();
         formData.append(fieldName, file);
-        fetch(uploadUrl, {
+        fetch(url, {
             method: 'post',
             body: formData,
-            header
+            headers
         })
-            .then(response => response.json())
-            .catch(error => console.log(error))
             .then(response => {
-                if (uploadCallback) {
-                    const filePath = this.filePath.current;
-                    filePath.value = uploadCallback(response);
+                if (response.status === 201) {
+                    return response.json()
+                } else {
+                    throw response.text()
                 }
+            })
+            .then(response => {
+                if (onSuccess) {
+                    const filePath = this.filePath.current;
+                    const result = onSuccess(response);
+                    filePath.value = result ? result : '';
+                }
+            })
+            .catch(error => {
+                error.then(response => {
+                    if (onError) onError(response)
+                })
             })
     };
 

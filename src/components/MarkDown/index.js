@@ -11,13 +11,15 @@ class MarkDown extends PureComponent{
 
         const { value, ...props } = this.props;
         return (
-            <ReactMarkdown
-                source={value}
-                renderers={{
-                    code: CodeBlock
-                }}
-                {...props}
-            />
+            <div className="markdown-body">
+                <ReactMarkdown
+                    source={value}
+                    renderers={{
+                        code: CodeBlock
+                    }}
+                    {...props}
+                />
+            </div>
         );
     }
 }

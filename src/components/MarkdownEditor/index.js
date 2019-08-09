@@ -89,7 +89,7 @@ class MarkdownEditor extends PureComponent {
 
         if (watch) {
             preview.style.width = `${(clientWidth+1)/2}px`;
-            codeWrapper.style.width = `${(clientWidth+1)/2}px`;
+            codeWrapper.style.width = `${clientWidth/2}px`;
             previewContainer.style.padding = '20px';
         } else {
             codeWrapper.style.width = `${clientWidth}px`;

@@ -23,13 +23,11 @@ class Dialog extends Component {
         const {
             container,
             width,
-            height,
             zIndex
         } = this.props;
         container.style.zIndex = zIndex;
         container.style.display = 'block';
         container.style.width = typeof width === 'number' ? `${width}px` : width;
-        container.style.height = typeof height === 'number' ? `${height}px` : height;
     };
 
     position = () => {
@@ -166,14 +164,12 @@ Dialog.showImageDialog = props => {
         imageUpload=true,
         width=(imageUpload ? 465 : 380),
         imageUploadProps,
-        height=254
     } = props;
     return  Dialog.showDialog({
         ...props,
         content: <ImageDialog imageUploadProps={imageUploadProps} classPrefix={classPrefix} imageUpload={imageUpload} {...contentProps} />,
         title,
         width,
-        height,
     });
 };
 
@@ -183,14 +179,12 @@ Dialog.showTableDialog = props => {
         contentProps,
         title='添加表格',
         width=360,
-        height=226
     } = props;
     return Dialog.showDialog({
         ...props,
         content: <TableDialog classPrefix={classPrefix} {...contentProps} />,
         title,
         width,
-        height,
     })
 };
 
@@ -200,14 +194,12 @@ Dialog.showGotoLineDialog = props => {
         contentProps,
         title='跳转到行',
         width=400,
-        height=180
     } = props;
     return Dialog.showDialog({
         ...props,
         content: <GotoLineDialog classPrefix={classPrefix} {...contentProps} />,
         title,
         width,
-        height,
     })
 };
 

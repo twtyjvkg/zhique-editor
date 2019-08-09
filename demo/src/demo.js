@@ -88,4 +88,15 @@ const value = "zhique-editor\n" +
     "  ```\n" +
     "  click [codemirror configuration](https://codemirror.net/doc/manual.html#config \"codemirror configuration\") for more info.\n";
 
-ReactDom.render(<MarkdownEditor id="test-editor" value={value} imageUploadURL="http://localhost:8000/api/v1/attachment/image" />, document.getElementById('app'));
+ReactDom.render(<MarkdownEditor id="test-editor" value={value} imageUploadProps={{
+    uploadUrl: 'http://localhost:8000/api/v1/attachment/upload',
+    fieldName: 'file',
+    header: {
+        Authorization: `JWT ${localStorage.getItem('zhique-blog-token')}`
+    },
+    uploadCallback: (response) => {
+        const { attachment_id } = response;
+        return `/api/v1/attachment/download?attachment_id=${attachment_id}`;
+    }
+}}
+/>, document.getElementById('app'));
