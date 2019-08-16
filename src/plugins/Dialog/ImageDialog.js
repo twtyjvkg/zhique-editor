@@ -24,7 +24,7 @@ class ImageDialog extends Component {
                 if (response.status === 201) {
                     return response.json()
                 } else {
-                    throw response.text()
+                    return Promise.reject(response)
                 }
             })
             .then(response => {
@@ -35,9 +35,7 @@ class ImageDialog extends Component {
                 }
             })
             .catch(error => {
-                error.then(response => {
-                    if (onError) onError(response)
-                })
+                if (onError) onError(error);
             })
     };
 
