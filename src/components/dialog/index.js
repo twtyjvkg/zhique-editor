@@ -10,174 +10,94 @@ import GotoLineDialog from "./GotoLineDialog";
 
 import './index.less';
 
-class Dialog extends Component {
+function createDialog(WrappedComponent) {
+    return class extends Component {
 
-    componentDidMount() {
-        this.init();
-        this.position();
-    }
+        componentDidMount =() => {
+            const {
+                container,
+                width,
+                editor
+            } = this.props;
+            container.style.display = 'block';
+            container.style.width = typeof width === 'number' ? `${width}px` : width;
+            container.style.top = `${(editor.clientHeight-container.clientHeight)/2}px`;
+            container.style.left = `${(editor.clientWidth-container.clientWidth)/2}px`;
+        };
 
-    init = () => {
-        const {
-            container,
-            width,
-            zIndex
-        } = this.props;
-        container.style.zIndex = zIndex;
-        container.style.display = 'block';
-        container.style.width = typeof width === 'number' ? `${width}px` : width;
-    };
+        destroy = () => {
+            const {
+                editor,
+                container
+            } = this.props;
+            editor.removeChild(container);
+        };
 
-    position = () => {
-        const {
-            editor,
-            container,
-        } = this.props;
-        container.style.top = `${(editor.clientHeight-container.clientHeight)/2}px`;
-        container.style.left = `${(editor.clientWidth-container.clientWidth)/2}px`;
-    };
+        render = () => {
 
-    destroy = () => {
-        const {
-            editor,
-            container
-        } = this.props;
-        editor.removeChild(container);
-    };
+            const {
+                classPrefix,
+                title,
+                footer,
+                ...dialogProps
+            } = this.props;
 
-    render() {
-
-        const {
-            classPrefix,
-            title,
-            content,
-            footer,
-        } = this.props;
-
-        return (
-            <Fragment>
-                {title && (
-                    <div className={`${classPrefix}-dialog-header`}>
-                        <strong className={`${classPrefix}-dialog-title`}>{title}</strong>
+            return (
+                <Fragment>
+                    {title && (
+                        <div className={`${classPrefix}-dialog-header`}>
+                            <strong className={`${classPrefix}-dialog-title`}>{title}</strong>
+                        </div>
+                    )}
+                    <div className={`fa ${classPrefix}-dialog-container`}>
+                        <WrappedComponent
+                            classPrefix={classPrefix}
+                            {...dialogProps}
+                        />
                     </div>
-                )}
-                <div className={`fa ${classPrefix}-dialog-container`}>
-                    {content}
-                </div>
-                {footer && (
-                    <div className={`${classPrefix}-dialog-footer`}>
-                        {footer.map(({ text, type='default', onClick }) => (
-                            <button
-                                key={text}
-                                className={classNames(`${classPrefix}-btn`, `${classPrefix}-${type}-btn`)}
-                                onClick={onClick}
-                            >
-                                {text}
-                            </button>
-                        ))}
-                    </div>
-                )}
-            </Fragment>
-        )
+                    {footer && (
+                        <div className={`${classPrefix}-dialog-footer`}>
+                            {footer.map(({ text, type='default', onClick }) => (
+                                <button
+                                    key={text}
+                                    className={classNames(`${classPrefix}-btn`, `${classPrefix}-${type}-btn`)}
+                                    onClick={onClick}
+                                >
+                                    {text}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </Fragment>
+            )
+        }
     }
 }
 
-Dialog.defaultProps = {
-    width: 420,
-    height: 240,
-    zIndex: 99999,
-};
+function showDialog(WrappedComponent, props) {
+    const { classPrefix, editor } = props;
+    let container = document.createElement('div');
+    container.setAttribute('class', `${classPrefix}-dialog`);
+    editor.appendChild(container);
+    return ReactDom.render(React.createElement(createDialog(WrappedComponent), { container, ...props }), container);
+}
 
-Dialog.showDialog = props => {
-    const { classPrefix, editor, ...dialogProps } = props;
-    let div = document.createElement('div');
-    div.setAttribute('class', `${classPrefix}-dialog`);
-    editor.appendChild(div);
-    return ReactDom.render(React.createElement(Dialog, {
-        ...dialogProps,
-        classPrefix,
-        editor,
-        container: div,
-    }), div);
-};
+export function showImageDialog(props) {
+    return showDialog(ImageDialog, { title: '添加图片', width: 465, ...props })
+}
 
-Dialog.showLinkDialog = props => {
-  const {
-      classPrefix,
-      content,
-      ...dialogProps
-  } = props;
-  return Dialog.showDialog({
-      classPrefix,
-      title: '添加链接',
-      width: 380,
-      height: 211,
-      content: <LinkDialog classPrefix={classPrefix} {...content} />,
-      ...dialogProps
-  })
-};
+export  function showLinkDialog(props) {
+    return showDialog(LinkDialog, { title: '添加链接', width: 380, ...props })
+}
 
-Dialog.showReferenceLinkDialog = props => {
-    const {
-        classPrefix,
-        content,
-        ...dialogProps
-    } = props;
-    return Dialog.showDialog({
-        classPrefix,
-        title: '添加引用链接',
-        width: 380,
-        height: 296,
-        content: <ReferenceLinkDialog classPrefix={classPrefix} {...content} />,
-        ...dialogProps
-    })
-};
+export  function showReferenceLinkDialog(props) {
+    return showDialog(ReferenceLinkDialog, { title: '添加引用链接', width: 380, ...props })
+}
 
-Dialog.showImageDialog = props => {
-  const {
-      classPrefix,
-      onImageSelect,
-      content,
-      ...dialogProps
-  } = props;
-  return Dialog.showDialog({
-      classPrefix,
-      title: '添加图片',
-      width: 465,
-      content: <ImageDialog onImageSelect={onImageSelect} classPrefix={classPrefix} {...content} />,
-      ...dialogProps
-  })
-};
+export  function showTableDialog(props) {
+    return showDialog(TableDialog, { title: '添加表格', width: 360, ...props })
+}
 
-Dialog.showTableDialog = props => {
-  const {
-      classPrefix,
-      content,
-      ...dialogProps
-  } = props;
-    return Dialog.showDialog({
-        classPrefix,
-        content: <TableDialog classPrefix={classPrefix} {...content} />,
-        title: '添加表格',
-        width: 360,
-        ...dialogProps
-    })
-};
-
-Dialog.showGotoLineDialog = props => {
-  const {
-      classPrefix,
-      content,
-      ...dialogProps
-  } = props;
-  return Dialog.showDialog({
-      classPrefix,
-      content: <GotoLineDialog classPrefix={classPrefix} {...content} />,
-      title: '跳转到行',
-      width: 400,
-      ...dialogProps
-  })
-};
-
-
-export default Dialog;
+export  function showGotoLineDialog(props) {
+    return showDialog(GotoLineDialog, { title: '跳转到行', width: 400, ...props })
+}

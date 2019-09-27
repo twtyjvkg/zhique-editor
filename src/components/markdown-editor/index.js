@@ -5,7 +5,13 @@ import moment from 'moment';
 import CodeEditor from '../code-editor';
 import Markdown from '../markdown';
 import Icon from '../icon';
-import Dialog from '../dialog';
+import {
+    showImageDialog,
+    showLinkDialog,
+    showReferenceLinkDialog,
+    showTableDialog,
+    showGotoLineDialog
+} from '../dialog';
 
 import './index.less';
 
@@ -22,7 +28,7 @@ class MarkdownEditor extends PureComponent {
             text: value || '',
             watch,
             fullScreen,
-            masking: false
+            masking: false,
         };
         this.markdownEditor = React.createRef();
         this.codeEditor = React.createRef();
@@ -400,12 +406,10 @@ class MarkdownEditor extends PureComponent {
                         masking: true,
                     });
                     const selection = editor.getSelection();
-                    const dialog = Dialog.showLinkDialog({
+                    const dialog = showLinkDialog({
                         classPrefix: classPrefix,
                         editor: this.markdownEditor.current,
-                        content: {
-                            selection
-                        },
+                        selection,
                         footer: [
                             {
                                 text: '确定',
@@ -443,12 +447,10 @@ class MarkdownEditor extends PureComponent {
                     this.setState({
                         masking: true
                     });
-                    const dialog = Dialog.showReferenceLinkDialog({
+                    const dialog = showReferenceLinkDialog({
                         classPrefix: classPrefix,
                         editor: this.markdownEditor.current,
-                        content: {
-                            selection
-                        },
+                        selection,
                         footer: [
                             {
                                 text: '确定',
@@ -485,17 +487,15 @@ class MarkdownEditor extends PureComponent {
                 icon: 'image',
                 onClick: (editor) => {
                     const { onImageSelect } = this.props;
-                    const selection = editor.getSelection();
                     this.setState({
-                        masking: true,
+                        masking: true
                     });
-                    const dialog = Dialog.showImageDialog({
+                    const selection = editor.getSelection();
+                    const dialog = showImageDialog({
                         classPrefix: classPrefix,
                         editor: this.markdownEditor.current,
                         onImageSelect,
-                        content: {
-                            selection,
-                        },
+                        selection,
                         footer: [
                             {
                                 text: '确定',
@@ -525,7 +525,7 @@ class MarkdownEditor extends PureComponent {
                                     this.destroyDialog(editor, dialog);
                                 }
                             }
-                        ]
+                        ],
                     });
                 }
             },
@@ -549,7 +549,7 @@ class MarkdownEditor extends PureComponent {
                     this.setState({
                         masking: true
                     });
-                    const dialog = Dialog.showTableDialog({
+                    const dialog = showTableDialog({
                         classPrefix: classPrefix,
                         editor: this.markdownEditor.current,
                         footer: [
@@ -618,12 +618,10 @@ class MarkdownEditor extends PureComponent {
                     this.setState({
                         masking: true
                     });
-                    const dialog = Dialog.showGotoLineDialog({
+                    const dialog = showGotoLineDialog({
                         classPrefix: classPrefix,
                         editor: this.markdownEditor.current,
-                        content: {
-                            lineCount: editor.lineCount()
-                        },
+                        lineCount: editor.lineCount(),
                         footer: [
                             {
                                 text: '确定',
