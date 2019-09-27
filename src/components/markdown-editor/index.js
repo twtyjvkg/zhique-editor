@@ -728,7 +728,6 @@ class MarkdownEditor extends PureComponent {
                 style={{ width, height }}
                 ref={this.markdownEditor}
             >
-                <Icon type="menu" />
                 <CodeEditor
                     value={text}
                     ref={this.codeEditor}

@@ -1,6 +1,6 @@
 .zhique-markdown-dialog {
   color: #666;
-  position: fixed;
+  position: absolute;
   z-index: 999999;
   display: none;
   border-radius: 3px;
@@ -9,7 +9,7 @@
   font-size: 14px;
 
   .zhique-markdown-dialog-header {
-    padding: 11px 20px;
+    padding: 10px 20px;
     border-bottom: 1px solid #eee;
     transition: background 300ms ease-out;
 
@@ -119,14 +119,16 @@
   .zhique-markdown-dialog-footer {
     padding: 11px 20px;
     text-align: right;
+
   }
 
   input[type=submit], .zhique-markdown-btn {
     color: #666;
     min-width: 75px;
+    height: 35px;
+    line-height: 34px;
     cursor: pointer;
     background: #fff;
-    padding: 7px 10px;
     border: 1px solid #ddd;
     border-radius: 3px;
     transition: background 300ms ease-out;

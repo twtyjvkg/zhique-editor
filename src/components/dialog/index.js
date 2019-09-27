@@ -30,10 +30,11 @@ class Dialog extends Component {
 
     position = () => {
         const {
+            editor,
             container,
         } = this.props;
-        container.style.top = `${(container.parentElement.clientHeight-container.clientHeight)/2}px`;
-        container.style.left = `${(container.parentElement.clientWidth-container.clientWidth)/2}px`;
+        container.style.top = `${(editor.clientHeight-container.clientHeight)/2}px`;
+        container.style.left = `${(editor.clientWidth-container.clientWidth)/2}px`;
     };
 
     destroy = () => {
