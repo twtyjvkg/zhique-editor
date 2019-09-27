@@ -2,11 +2,12 @@ const path = require('path');
 const webpack = require('webpack');
 const prod = process.env.NODE_ENV === 'production';
 const nodeExternals = require('webpack-node-externals');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     mode: prod ? 'production' : 'development',
     entry: {
-        index: ['./src/index.js'],
+        index: path.resolve(__dirname, 'src', 'Root.js')
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -27,6 +28,11 @@ module.exports = {
         ]
     },
     plugins: [
+        new CleanWebpackPlugin({
+            dry: false,
+            verbose: true,
+            cleanOnceBeforeBuildPatterns: [path.resolve(__dirname, 'dist')]
+        }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
         }),

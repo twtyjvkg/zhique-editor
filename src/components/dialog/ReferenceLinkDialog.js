@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 class ReferenceLinkDialog extends Component {
 
-
     render() {
 
         const {
@@ -12,19 +11,19 @@ class ReferenceLinkDialog extends Component {
 
         return (
             <div className={`${classPrefix}-form`}>
-                <div>
+                <div className="form-group">
                     <label>引用名称</label>
                     <input type="text" data-name />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>链接ID</label>
                     <input type="text" data-url-id />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>链接地址</label>
                     <input type="text" data-url />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>链接标题</label>
                     <input type="text" defaultValue={selection} data-title />
                 </div>

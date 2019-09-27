@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import PropTypes from 'prop-types';
 
-class CodeBlock extends Component {
+
+class Code extends Component {
 
     render() {
         const { value, language } = this.props;
@@ -20,14 +21,14 @@ class CodeBlock extends Component {
     }
 }
 
-CodeBlock.defaultProps = {
+Code.defaultProps = {
     language: '',
     value: ''
 };
 
-CodeBlock.propTypes = {
+Code.propTypes = {
     value: PropTypes.string,
     language: PropTypes.string,
 };
 
-export default CodeBlock;
+export default Code;

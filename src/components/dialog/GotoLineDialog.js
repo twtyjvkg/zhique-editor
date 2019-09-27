@@ -10,20 +10,21 @@ class GotoLineDialog extends Component {
         } = this.props;
 
         return (
-            <div className={`${classPrefix}-form`} style={{ padding: '10px 0' }}>
-                <p style={{ margin: 0 }}>
-                    请输入行号 1-{lineCount}&nbsp;&nbsp;&nbsp;
+            <div className={`${classPrefix}-form`}>
+                <div className="form-group">
+                    <label style={{ width: 120 }}>请输入行号 1-{lineCount}</label>
                     <input
                         type="number"
                         className="number-input"
-                        style={{ width: 60 }}
+                        style={{ width: 190 }}
                         defaultValue={1}
                         max={lineCount}
                         data-line-number
                     />
-                </p>
+                </div>
             </div>
-        );
+        )
+
     }
 }
 

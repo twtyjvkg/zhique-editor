@@ -1,70 +1,42 @@
 {
-  "name": "@zhique-design/zhique-editor",
-  "version": "0.3.0",
-  "description": "markdown editor as React components",
+  "name": "zhique-editor",
+  "version": "1.0.0",
+  "description": "online editor as React components",
   "main": "dist/index.js",
-  "keywords": [
-    "markdown",
-    "markdown-editor",
-    "react",
-    "react-markdown-editor",
-    "react-component",
-    "zhique-design",
-    "zhique-editor"
-  ],
-  "files": [
-    "dist"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zhique-design/zhique-editor.git"
-  },
-  "bugs": {
-    "url": "https://github.com/zhique-design/zhique-editor/issues"
-  },
-  "homepage": "https://editor.zhique.design",
-  "author": "徐昭 <xuzhao@zhique.design>",
+  "repository": "git@github.com:zhique-design/zhique-editor.git",
+  "author": "xuzhao <xuzhao@zhique.design>",
   "license": "Apache-2.0",
   "private": false,
   "scripts": {
-    "build": "webpack -p --env.NODE_ENV=production",
-    "start:demo": "webpack-dev-server -p --config webpack.config.dev.js",
-    "build:demo": "webpack -p --env.NODE_ENV=production --config webpack.config.dev.js",
-    "deploy": "npm run build:demo && gh-pages -d demo/dist"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.19",
-    "@fortawesome/free-regular-svg-icons": "^5.9.0",
-    "@fortawesome/free-solid-svg-icons": "^5.9.0",
-    "@fortawesome/react-fontawesome": "^0.1.4",
-    "classnames": "^2.2.6",
-    "codemirror": "^5.48.2",
-    "github-markdown-css": "^3.0.1",
-    "moment": "^2.24.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-markdown": "^4.1.0",
-    "react-syntax-highlighter": "^11.0.2"
+    "start:demo": "webpack-dev-server -p --config webpack.config.dev.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "^7.6.2",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-env": "^7.6.2",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.1.0",
-    "gh-pages": "^2.0.1",
+    "css-loader": "^3.2.0",
     "html-webpack-plugin": "^3.2.0",
-    "less": "^3.9.0",
+    "less": "^3.10.3",
     "less-loader": "^5.0.0",
-    "mini-css-extract-plugin": "^0.8.0",
-    "path": "^0.12.7",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.36.1",
-    "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1",
     "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "codemirror": "^5.49.0",
+    "github-markdown-css": "^3.0.1",
+    "moment": "^2.24.0",
+    "prop-types": "latest",
+    "react-markdown": "^4.2.2",
+    "react-syntax-highlighter": "^11.0.2",
+    "viewerjs": "^1.3.6"
   }
 }

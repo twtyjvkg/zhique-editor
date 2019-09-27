@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import { MarkdownEditor } from '../../src/';
+import ZhiQueEditor from '../../src/';
 
 const value = "zhique-editor\n" +
     "======================\n" +
@@ -10,6 +10,7 @@ const value = "zhique-editor\n" +
     "\n" +
     "**zhique-editor** : The open source online code editor (component), based on [react](https://reactjs.org/ \"react\") & [react-markdown](http://rexxars.github.io/react-markdown/ \"react-markdown\") & [codemirror](https://codemirror.net/ \"codemirror\").\n" +
     "\n" +
+    "![测试一下](https://www.baidu.com/img/dong_a16028f60eed614e4fa191786f32f417.gif \"测试一下\")\n" +
     "## Features\n" +
     "\n" +
     "- Support Standard Markdown / CommonMark and GFM (GitHub Flavored Markdown)\n" +
@@ -88,7 +89,7 @@ const value = "zhique-editor\n" +
     "  ```\n" +
     "  click [codemirror configuration](https://codemirror.net/doc/manual.html#config \"codemirror configuration\") for more info.\n";
 
-ReactDom.render(<MarkdownEditor id="test-editor" value={value} imageUploadProps={{
+ReactDom.render(<ZhiQueEditor type="markdown-editor" id="test-editor" value={value} imageUploadProps={{
     uploadUrl: 'http://localhost:8000/api/v1/attachment/upload',
     fieldName: 'file',
     header: {
