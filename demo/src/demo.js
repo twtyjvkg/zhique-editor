@@ -10,13 +10,13 @@ const value = "zhique-editor\n" +
     "\n" +
     "**zhique-editor** : The open source online code editor (component), based on [react](https://reactjs.org/ \"react\") & [react-markdown](http://rexxars.github.io/react-markdown/ \"react-markdown\") & [codemirror](https://codemirror.net/ \"codemirror\").\n" +
     "\n" +
-    "![测试一下](https://www.baidu.com/img/dong_a16028f60eed614e4fa191786f32f417.gif \"测试一下\")\n" +
     "## Features\n" +
     "\n" +
     "- Support Standard Markdown / CommonMark and GFM (GitHub Flavored Markdown)\n" +
     "- Real-time Preview, Code fold, Code syntax highlighting...\n" +
     "- Synchronized scrolling\n" +
-    "- toolbar for markdown\n" +
+    "- powerful toolbar for markdown editor\n" +
+    "- image viewer\n" +
     "\n" +
     "## Installing\n" +
     "\n" +
@@ -41,34 +41,26 @@ const value = "zhique-editor\n" +
     "  ```typescript jsx\n" +
     "  import React from 'react';\n" +
     "  import ReactDom from 'react-dom';\n" +
-    "  import { MarkdownEditor } from '@zhique-design/zhique-editor';\n" +
-    "  ReactDom.render(<MarkdownEditor />, document.getElementById('app'));\n" +
+    "  import ZhiQueEditor from '@zhique-design/zhique-editor';\n" +
+    "  ReactDom.render(<ZhiQueEditor />, document.getElementById('app'));\n" +
     "  ```\n" +
     "2. **props**\n" +
     "\n" +
     "  |  prop\t | description | type  | default  |\n" +
     "  | :------------: | :------------: | :------------: | :------------: |\n" +
     "  |  `classPrefix` |  component class prefix | string |  `zhique-markdown` |\n" +
+    "  |  `type` |  component type(markdown-editor or markdown) | string |  `markdown-editor` |\n" +
     "  |  `width` |  component width |  string or number |  `90%` |\n" +
     "  |  `height` |  component height |  string or number | `500`  |\n" +
     "  |  `watch` |  Real-time Preview |  bool | `true`  |\n" +
     "  |  `fullScreen` |  fullScreen mode |  bool |  `false` |\n" +
     "  | `dateFormat`  | date format  | string  | `YYYY年MM月DD日 dddd`  |\n" +
     "  |  `value` | component value  |  string | `''`  |\n" +
-    "  |  `imageUploadProps` |  the props of iamge upload dialog | object  |  - |\n" +
-    "  | `codeMirrorProps` | the props of codeMirror | object | - |\n" +
+    "  | `options` | the options of codeMirror | object | - |\n" +
+    "   |  `onImageSelect` |  the image has been selected to upload |  function(e, field) |  - |\n" +
     "  |  `onChange` |  the component value has been changed |  function(value) |  - |\n" +
-    "  \n" +
-    "3. **imageUploadProps**\n" +
     "\n" +
-    " |  prop\t | description | type  | default  |\n" +
-    "  | :------------: | :------------: | :------------: | :------------: |\n" +
-    "  | `fieldName` | the name of image field | string | `image` |\n" +
-    "  | `header` | the request header | object | - |\n" +
-    "|  `uploadUrl` |  image upload url |  string |  - |\n" +
-    "|  `uploadCallback` |  image upload callback | function(response)  |  - |\n" +
-    "\n" +
-    "4. **codeMirrorProps**\n" +
+    "4. **options**\n" +
     "\n" +
     "  ```clike\n" +
     "  {\n" +
@@ -89,15 +81,4 @@ const value = "zhique-editor\n" +
     "  ```\n" +
     "  click [codemirror configuration](https://codemirror.net/doc/manual.html#config \"codemirror configuration\") for more info.\n";
 
-ReactDom.render(<ZhiQueEditor type="markdown-editor" id="test-editor" value={value} imageUploadProps={{
-    uploadUrl: 'http://localhost:8000/api/v1/attachment/upload',
-    fieldName: 'file',
-    header: {
-        Authorization: `JWT ${localStorage.getItem('zhique-blog-token')}`
-    },
-    uploadCallback: (response) => {
-        const { attachment_id } = response;
-        return `/api/v1/attachment/download?attachment_id=${attachment_id}`;
-    }
-}}
-/>, document.getElementById('app'));
+ReactDom.render(<ZhiQueEditor type="markdown-editor" id="test-editor" value={value}/>, document.getElementById('app'));

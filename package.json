@@ -1,6 +1,6 @@
 {
   "name": "@zhique-design/zhique-editor",
-  "version": "1.0.0",
+  "version": "0.4.0",
   "description": "online editor as React components",
   "main": "dist/index.js",
   "keywords": [
@@ -28,7 +28,9 @@
   "private": false,
   "scripts": {
     "build": "webpack -p --env.NODE_ENV=production",
-    "start:demo": "webpack-dev-server -p --config webpack.config.dev.js"
+    "start:demo": "webpack-dev-server -p --config webpack.config.dev.js",
+    "build:demo": "webpack -p --env.NODE_ENV=production --config webpack.config.dev.js",
+    "deploy": "npm run build:demo && gh-pages -d demo/dist"
   },
   "dependencies": {
     "classnames": "^2.2.6",
@@ -48,6 +50,7 @@
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
+    "gh-pages": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",

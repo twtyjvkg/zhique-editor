@@ -9,7 +9,7 @@ const ZhiQueEditor = ({ type, ...props }) => {
             return (
                 <MarkdownEditor {...props} />
             );
-        case 'markdown-preview':
+        case 'markdown':
             return (
                 <Markdown {...props} />
             );
@@ -25,7 +25,7 @@ ZhiQueEditor.defaultProps = {
 };
 
 ZhiQueEditor.propTypes = {
-    type: PropTypes.oneOf(['markdown-editor', 'markdown-preview'])
+    type: PropTypes.oneOf(['markdown-editor', 'markdown'])
 };
 
 export default ZhiQueEditor;
