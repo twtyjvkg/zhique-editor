@@ -1,7 +1,8 @@
 language: node_js
 node_js:
-  - "lts/*"
-install: npm install
+  - node
+install:
+  - npm install
 script:
   - npm run build
   - npm run build:demo
