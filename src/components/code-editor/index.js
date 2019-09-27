@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import CodeMirror from 'codemirror';
+import PropTypes from 'prop-types';
 
 import 'codemirror/lib/codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -30,7 +31,23 @@ import 'codemirror/mode/groovy/groovy';
 
 import './index.less';
 
-class CodeEditor extends PureComponent{
+const defaultOptions = {
+    mode: 'gfm',
+    theme: 'default',
+    lineWrapping: true,
+    lineNumbers: true,
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    matchBrackets: true,
+    autofocus: true,
+    autoCloseBrackets: true,
+    matchTags: true,
+    autoCloseTags: true,
+    styleActiveLine: true,
+    styleSelectedText: true
+};
+
+class CodeEditor extends PureComponent {
 
     constructor(props) {
         super(props);
@@ -38,46 +55,40 @@ class CodeEditor extends PureComponent{
         this.editorArea = React.createRef();
         this.state = {
             text: value || ''
-        };
+        }
     }
-
 
     componentDidMount() {
-        this.init();
-    }
-
-    init = () => {
-        const { options, fontSize, codeMirrorProps } = this.props;
+        const { options, fontSize } = this.props;
         const editorArea = this.editorArea.current;
-        const codeEditor = CodeMirror.fromTextArea(
+        this.editor = CodeMirror.fromTextArea(
             editorArea,
-            {...options, ...codeMirrorProps}
+            {...defaultOptions, ...options}
         );
         const {
             display: {
                 scroller,
                 wrapper
             }
-        } = codeEditor;
+        } = this.editor;
         wrapper.style.fontSize = fontSize;
-        this.editor = codeEditor;
         this.scroller = scroller;
         this.wrapper = wrapper;
         this.initListener();
-    };
+    }
 
     initListener = () => {
-        const codeEditor = this.editor;
-        const codeWrapper = this.wrapper;
-        codeEditor.on('change', (cm, changeObj) =>this.handleChange(cm, changeObj));
-        codeWrapper.addEventListener('mouseover', this.cmBindScroll);
-        codeWrapper.addEventListener('touchstart', this.cmBindScroll);
-        codeWrapper.addEventListener('mouseout', this.cmUnbindScroll);
-        codeWrapper.addEventListener('touchend', this.cmUnbindScroll);
+        const editor = this.editor;
+        const wrapper = this.wrapper;
+        editor.on('change', (cm, changeObj) => this.handleChange(cm, changeObj));
+        wrapper.addEventListener('mouseover', this.cmBindScroll);
+        wrapper.addEventListener('touchstart', this.cmBindScroll);
+        wrapper.addEventListener('mouseout', this.cmUnbindScroll);
+        wrapper.addEventListener('touchend', this.cmUnbindScroll);
     };
 
     cmBindScroll = () => {
-      this.scroller.addEventListener('scroll', this.cmScroll);
+        this.scroller.addEventListener('scroll', this.cmScroll);
     };
 
     cmUnbindScroll = () => {
@@ -102,32 +113,22 @@ class CodeEditor extends PureComponent{
 
 
     render() {
-
         const { text } = this.state;
-
         return (
             <textarea ref={this.editorArea} defaultValue={text} />
-        );
+        )
     }
 }
 
 CodeEditor.defaultProps = {
     fontSize: '13px',
-    options: {
-        mode: 'gfm',
-        theme: 'default',
-        lineWrapping: true,
-        lineNumbers: true,
-        foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-        matchBrackets: true,
-        autofocus: true,
-        autoCloseBrackets: true,
-        matchTags: true,
-        autoCloseTags: true,
-        styleActiveLine: true,
-        styleSelectedText: true
-    },
+    onChange: undefined,
+    onScroll: undefined
+};
+
+CodeEditor.propTypes = {
+    onChange: PropTypes.func,
+    onScroll: PropTypes.func,
 };
 
 export default CodeEditor;

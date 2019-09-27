@@ -1,35 +1,11 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
-import {
-    faImage,
-    faClock,
-    faNewspaper
-} from '@fortawesome/free-regular-svg-icons';
-import {
-    faUndo,
-    faRedo,
-    faBold,
-    faStrikethrough,
-    faItalic,
-    faQuoteLeft,
-    faListUl,
-    faListOl,
-    faMinus,
-    faLink,
-    faAnchor,
-    faCode,
-    faTable,
-    faTerminal,
-    faArrowsAlt
-} from '@fortawesome/free-solid-svg-icons';
 
-import CodeEditor from '../CodeEditor';
-import MarkDown from '../MarkDown';
-
-import Dialog from '../../plugins/Dialog';
+import CodeEditor from '../code-editor';
+import Markdown from '../markdown';
+import Icon from '../icon';
+import Dialog from '../dialog';
 
 import './index.less';
 
@@ -45,14 +21,14 @@ class MarkdownEditor extends PureComponent {
         this.state = {
             text: value || '',
             watch,
-            fullScreen
+            fullScreen,
+            masking: false
         };
-        this.editor = React.createRef();
+        this.markdownEditor = React.createRef();
         this.codeEditor = React.createRef();
         this.preview = React.createRef();
         this.previewContainer = React.createRef();
         this.toolbar = React.createRef();
-        this.dialog = React.createRef();
     }
 
     componentDidMount() {
@@ -62,31 +38,32 @@ class MarkdownEditor extends PureComponent {
     resize = () => {
         const { width, height } = this.props;
         const { fullScreen, watch } = this.state;
-        const editor = this.editor.current;
-        const toolbar = this.toolbar.current;
+        const markdownEditor = this.markdownEditor.current;
         const preview = this.preview.current;
         const previewContainer = this.previewContainer.current;
         const codeWrapper = this.codeEditor.current.wrapper;
+        const toolbar = this.toolbar.current;
         if (fullScreen) {
-            editor.style.width = `${window.innerWidth}px`;
-            editor.style.height = `${window.innerHeight}px`;
+            markdownEditor.style.width = `${window.innerWidth}px`;
+            markdownEditor.style.height = `${window.innerHeight}px`;
             window.addEventListener('keyup', this.handleEsc);
         } else {
-            editor.style.width = typeof width === 'string' ? width : `${width}px`;
-            editor.style.height = typeof height === 'string' ? height : `${height}px`;
+            markdownEditor.style.width = typeof width === 'string' ? width : `${width}px`;
+            markdownEditor.style.height = typeof height === 'string' ? height : `${height}px`;
             window.removeEventListener('keyup', this.handleEsc);
         }
-        const { clientWidth, clientHeight } = editor;
+        const { clientWidth, clientHeight } = markdownEditor;
         if (toolbar) {
             codeWrapper.style.height = `${clientHeight-toolbar.clientHeight}px`;
-            preview.style.height = `${clientHeight-toolbar.clientHeight}px`;
-            preview.style.top = `${toolbar.clientHeight+1}px`;
+            codeWrapper.style.marginTop = toolbar ? `${toolbar.clientHeight+1}px` : 0;
+            if (watch) {
+                preview.style.height = `${clientHeight-toolbar.clientHeight}px`;
+                preview.style.top = `${toolbar.clientHeight+1}px`;
+            }
         } else {
             codeWrapper.style.height = `${clientHeight}px`;
+            if (watch) preview.style.height = `${clientHeight}px`;
         }
-
-        codeWrapper.style.marginTop = toolbar ? `${toolbar.clientHeight+1}px` : 0;
-
         if (watch) {
             preview.style.width = `${(clientWidth+1)/2}px`;
             codeWrapper.style.width = `${clientWidth/2}px`;
@@ -121,13 +98,16 @@ class MarkdownEditor extends PureComponent {
     };
 
     previewScroll = (top, scrollHeight, height, percent) => {
-        const preview = this.preview.current;
-        if (top === 0) {
-            preview.scrollTop = 0
-        } else if (top + height >= scrollHeight - 16) {
-            preview.scrollTop = preview.scrollHeight;
-        } else {
-            preview.scrollTop = preview.scrollHeight * percent;
+        const { watch } = this.state;
+        if (watch) {
+            const preview = this.preview.current;
+            if (top === 0) {
+                preview.scrollTop = 0
+            } else if (top + height >= scrollHeight - 16) {
+                preview.scrollTop = preview.scrollHeight;
+            } else {
+                preview.scrollTop = preview.scrollHeight * percent;
+            }
         }
     };
 
@@ -156,17 +136,21 @@ class MarkdownEditor extends PureComponent {
         }
     };
 
-    wordsFirstUpperCase = str => {
-        return str.toLowerCase().replace(/\b(\w)|\s(\w)/g, item => item.toUpperCase());
+    destroyDialog = (editor, dialog) => {
+        editor.focus();
+        dialog.destroy();
+        this.setState({
+            masking: false,
+        });
     };
 
     initToolbarMenu = () => {
-
         const { classPrefix } = this.props;
+        const { fullScreen, watch } = this.state;
         const menuList = [
             {
                 title: '撤销（Ctrl+Z）',
-                icon: faUndo,
+                icon: 'undo',
                 onClick: (editor) => {
                     editor.focus();
                     editor.undo();
@@ -174,7 +158,7 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '重做（Ctrl+Y）',
-                icon: faRedo,
+                icon: 'redo',
                 onClick: (editor) => {
                     editor.focus();
                     editor.redo();
@@ -183,7 +167,7 @@ class MarkdownEditor extends PureComponent {
             '|',
             {
                 title: '粗体',
-                icon: faBold,
+                icon: 'bold',
                 onClick: (editor) => {
                     editor.focus();
                     const cursor = editor.getCursor();
@@ -196,7 +180,7 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '删除线',
-                icon: faStrikethrough,
+                icon: 'strikethrough',
                 onClick: (editor) => {
                     editor.focus();
                     const cursor = editor.getCursor();
@@ -210,7 +194,7 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '斜体',
-                icon: faItalic,
+                icon: 'italic',
                 onClick: (editor) => {
                     editor.focus();
                     const cursor = editor.getCursor();
@@ -223,7 +207,7 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '引用',
-                icon: faQuoteLeft,
+                icon: 'quote-left',
                 onClick: (editor) => {
                     editor.focus();
                     const cursor = editor.getCursor();
@@ -370,7 +354,7 @@ class MarkdownEditor extends PureComponent {
             '|',
             {
                 title: '无序列表',
-                icon: faListUl,
+                icon: 'unorderedlist',
                 onClick: (editor) => {
                     editor.focus();
                     const selection = editor.getSelection();
@@ -385,7 +369,7 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '有序列表',
-                icon: faListOl,
+                icon: 'orderedlist',
                 onClick: (editor) => {
                     editor.focus();
                     const selection = editor.getSelection();
@@ -400,7 +384,7 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '横线',
-                icon: faMinus,
+                icon: 'minus',
                 onClick: (editor) => {
                     editor.focus();
                     const cursor = editor.getCursor();
@@ -410,16 +394,19 @@ class MarkdownEditor extends PureComponent {
             '|',
             {
                 title: '链接',
-                icon: faLink,
+                icon: 'link',
                 onClick: (editor) => {
+                    this.setState({
+                        masking: true,
+                    });
                     const selection = editor.getSelection();
                     const dialog = Dialog.showLinkDialog({
                         classPrefix: classPrefix,
-                        editor: this.editor.current,
-                        contentProps: {
+                        editor: this.markdownEditor.current,
+                        content: {
                             selection
                         },
-                        buttons: [
+                        footer: [
                             {
                                 text: '确定',
                                 type: 'enter',
@@ -434,15 +421,14 @@ class MarkdownEditor extends PureComponent {
                                         str = `[${url}](${url})`
                                     }
                                     editor.replaceSelection(str);
-                                    editor.focus();
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             },
                             {
                                 text: '取消',
                                 type: 'cancel',
                                 onClick: () => {
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             }
                         ]
@@ -451,16 +437,19 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '引用链接',
-                icon: faAnchor,
+                icon: 'anchor',
                 onClick: (editor) => {
                     const selection = editor.getSelection();
+                    this.setState({
+                        masking: true
+                    });
                     const dialog = Dialog.showReferenceLinkDialog({
                         classPrefix: classPrefix,
-                        editor: this.editor.current,
-                        contentProps: {
+                        editor: this.markdownEditor.current,
+                        content: {
                             selection
                         },
-                        buttons: [
+                        footer: [
                             {
                                 text: '确定',
                                 type: 'enter',
@@ -477,15 +466,14 @@ class MarkdownEditor extends PureComponent {
                                         editor.setCursor(cursor.line, cursor.ch+1);
                                     }
                                     editor.setValue(`${editor.getValue()}\n[${rid}]: ${url} ${title === '' ? '' : `"${title}"`}`);
-                                    editor.focus();
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             },
                             {
                                 text: '取消',
                                 type: 'cancel',
                                 onClick: () => {
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             }
                         ]
@@ -494,18 +482,21 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '添加图片',
-                icon: faImage,
+                icon: 'image',
                 onClick: (editor) => {
-                    const { imageUploadProps } = this.props;
+                    const { onImageSelect } = this.props;
                     const selection = editor.getSelection();
+                    this.setState({
+                        masking: true,
+                    });
                     const dialog = Dialog.showImageDialog({
                         classPrefix: classPrefix,
-                        editor: this.editor.current,
-                        imageUploadProps,
-                        contentProps: {
-                            selection
+                        editor: this.markdownEditor.current,
+                        onImageSelect,
+                        content: {
+                            selection,
                         },
-                        buttons: [
+                        footer: [
                             {
                                 text: '确定',
                                 type: 'enter',
@@ -524,15 +515,14 @@ class MarkdownEditor extends PureComponent {
                                     if (alt === '') {
                                         editor.setCursor(cursor.line, cursor.ch + 2);
                                     }
-                                    editor.focus();
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             },
                             {
                                 text: '取消',
                                 type: 'cancel',
                                 onClick: () => {
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             }
                         ]
@@ -541,7 +531,7 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '行内代码',
-                icon: faCode,
+                icon: 'code',
                 onClick: (editor) => {
                     editor.focus();
                     const cursor = editor.getCursor();
@@ -554,12 +544,15 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '表格',
-                icon: faTable,
+                icon: 'table',
                 onClick: (editor) => {
+                    this.setState({
+                        masking: true
+                    });
                     const dialog = Dialog.showTableDialog({
                         classPrefix: classPrefix,
-                        editor: this.editor.current,
-                        buttons: [
+                        editor: this.markdownEditor.current,
+                        footer: [
                             {
                                 text: '确定',
                                 type: 'enter',
@@ -571,10 +564,10 @@ class MarkdownEditor extends PureComponent {
                                     let table = '';
                                     const hrLine = "------------";
                                     const alignSign = {
-                                      default: hrLine,
-                                      left: `:${hrLine}`,
-                                      center: `:${hrLine}:`,
-                                      right: `${hrLine}:`
+                                        default: hrLine,
+                                        left: `:${hrLine}`,
+                                        center: `:${hrLine}:`,
+                                        right: `${hrLine}:`
                                     };
                                     if (rows > 1 && cols > 0) {
                                         for (let r = 0, len = rows; r < len; r++) {
@@ -593,15 +586,14 @@ class MarkdownEditor extends PureComponent {
                                         }
                                     }
                                     editor.replaceSelection(table);
-                                    editor.focus();
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             },
                             {
                                 text: '取消',
                                 type: 'cancel',
                                 onClick: () => {
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             }
                         ]
@@ -610,7 +602,7 @@ class MarkdownEditor extends PureComponent {
             },
             {
                 title: '日期时间',
-                icon: faClock,
+                icon: 'time-circle',
                 onClick: (editor) => {
                     const { dateFormat } = this.props;
                     editor.focus();
@@ -618,26 +610,21 @@ class MarkdownEditor extends PureComponent {
                     editor.replaceSelection(moment().format(dateFormat));
                 }
             },
-            {
-                title: '插入分页符',
-                icon: faNewspaper,
-                onClick: (editor) => {
-                    editor.focus();
-                    editor.replaceSelection('\r\n[========]\r\n');
-                }
-            },
             '|',
             {
                 title: '跳转到行',
-                icon: faTerminal,
+                icon: 'terminal',
                 onClick: (editor) => {
+                    this.setState({
+                        masking: true
+                    });
                     const dialog = Dialog.showGotoLineDialog({
                         classPrefix: classPrefix,
-                        editor: this.editor.current,
-                        contentProps: {
+                        editor: this.markdownEditor.current,
+                        content: {
                             lineCount: editor.lineCount()
                         },
-                        buttons: [
+                        footer: [
                             {
                                 text: '确定',
                                 type: 'enter',
@@ -657,15 +644,14 @@ class MarkdownEditor extends PureComponent {
                                     } = codeScroller;
                                     const percent = scrollTop / scrollHeight;
                                     this.previewScroll(scrollTop, scrollHeight, height, percent);
-                                    editor.focus();
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             },
                             {
                                 text: '取消',
                                 type: 'cancel',
                                 onClick: () => {
-                                    dialog.destroy();
+                                    this.destroyDialog(editor, dialog);
                                 }
                             }
                         ]
@@ -673,20 +659,29 @@ class MarkdownEditor extends PureComponent {
                 }
             },
             {
-                title: '全屏（按ESC还原）',
-                icon: faArrowsAlt,
-                onClick: (editor) => {
+                title: fullScreen ? '退出全屏' : '全屏（按ESC还原）',
+                icon: `fullscreen${fullScreen ? '-exit' : ''}`,
+                onClick: () => {
                     const { fullScreen } = this.state;
                     this.setState({
                         fullScreen: !fullScreen
                     }, () => {
                         this.resize();
                     });
-
                 }
             },
+            {
+                title: `${watch ? '关闭' : '开启'}实时预览`,
+                icon: `eye${watch ? '-close' : ''}`,
+                onClick: () => {
+                    this.setState({
+                        watch: !watch,
+                    }, () => {
+                        this.resize();
+                    })
+                }
+            }
         ];
-
         return (
             <ul className={`${classPrefix}-menu`}>
                 {menuList.map((item, index) => {
@@ -698,10 +693,14 @@ class MarkdownEditor extends PureComponent {
                             <li
                                 key={index}
                                 onClick={() => onClick(this.codeEditor.current.editor)}
+                                title={title}
                             >
-                                <a>
-                                    <i className="fa" title={title}>
-                                        {icon && <FontAwesomeIcon icon={icon} />}{text && <b>{text}</b>}
+                                <a className="icon">
+                                    <i>
+                                        {icon && (
+                                            <Icon type={icon} />
+                                        )}
+                                        {text}
                                     </i>
                                 </a>
                             </li>
@@ -712,26 +711,27 @@ class MarkdownEditor extends PureComponent {
         )
     };
 
+
     render() {
 
         const {
             classPrefix,
             width,
             height,
-            codeMirrorProps
         } = this.props;
 
-        const { text, watch, fullScreen } = this.state;
+        const { text, watch, fullScreen, masking } = this.state;
+
         return (
             <div
-                className={classNames(classPrefix, fullScreen ? `${classPrefix}-fullscreen` : '')}
+                className={classNames(`${classPrefix}-editor`, fullScreen ? `${classPrefix}-fullscreen` : '')}
                 style={{ width, height }}
-                ref={this.editor}
+                ref={this.markdownEditor}
             >
+                <Icon type="menu" />
                 <CodeEditor
-                    ref={this.codeEditor}
                     value={text}
-                    codeMirrorProps={codeMirrorProps}
+                    ref={this.codeEditor}
                     onChange={this.handleChange}
                     onScroll={this.previewScroll}
                 />
@@ -745,15 +745,14 @@ class MarkdownEditor extends PureComponent {
                         onTouchEnd={this.previewUnbindScroll}
                     >
                         <div
-                            className={classNames('markdown-body', `${classPrefix}preview-container`)}
+                            className={`${classPrefix}-preview-container`}
                             ref={this.previewContainer}
                         >
-                            <MarkDown
-                                value={text}
-                            />
+                            <Markdown value={text} />
                         </div>
                     </div>
                 )}
+                <div className={classNames(`${classPrefix}-mask`, masking ? 'show-mask' : '')} />
                 <div className={`${classPrefix}-toolbar`} ref={this.toolbar}>
                     <div className={`${classPrefix}-toolbar-container`}>
                         {this.initToolbarMenu()}
@@ -761,6 +760,7 @@ class MarkdownEditor extends PureComponent {
                 </div>
             </div>
         )
+
     }
 }
 
@@ -771,12 +771,6 @@ MarkdownEditor.defaultProps = {
     watch: true,
     fullScreen: false,
     dateFormat: 'YYYY年MM月DD日 dddd'
-};
-
-MarkdownEditor.propTypes = {
-    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    classPrefix: PropTypes.string
 };
 
 export default MarkdownEditor;
