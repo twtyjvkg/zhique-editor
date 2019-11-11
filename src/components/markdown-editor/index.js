@@ -508,7 +508,7 @@ class MarkdownEditor extends PureComponent {
                                     const cursor = editor.getCursor();
                                     const altAttr = alt !== '' ? `"${alt}"` : '';
                                     if (link === '' || link === 'http://') {
-                                        editor.replaceSelection(`![${alt}](${url}) ${altAttr}`)
+                                        editor.replaceSelection(`![${alt}](${url})`)
                                     } else {
                                         editor.replaceSelection(`[![${alt}](${url} ${altAttr})](${link} ${altAttr})`)
                                     }

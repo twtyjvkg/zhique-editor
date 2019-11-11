@@ -23,10 +23,10 @@ class ImageDialog extends Component {
             <div className={`${classPrefix}-form`}>
                 <div className="form-group">
                     <label>图片地址</label>
-                    <input type="text" data-url style={{ width: onImageSelect ? 240 : 325 }} />
+                    <input type="text" data-url ref={this.urlInput} style={{ width: onImageSelect ? 240 : 325 }} />
                     {onImageSelect && (
                         <div className={`${classPrefix}-file-input`}>
-                            <input ref={this.urlInput} onChange={this.handleFileChange} type="file" name={`${classPrefix}-image-file`} accept="image/*" />
+                            <input onChange={this.handleFileChange} type="file" name={`${classPrefix}-image-file`} accept="image/*" />
                             <input type="submit" value="本地上传" />
                         </div>
                     )}
